@@ -10,8 +10,8 @@ Linux Mint/Ubuntu/Pop!OS
 - Open the terminal and clone this repository to your directory of choice:
 ```bash
 cd ~/Downloads/
-git clone https://github.com/shiroininjaTech/AstroNinja-Stable.git
-cd AstroNinja-Stable/
+git clone https://github.com/shiroininjaTech/AstroNinja-Unstable.git
+cd AstroNinja-Unstable/
 ```
 - Use chmod to change the permissions of the installation file and run it:
 ```bash
