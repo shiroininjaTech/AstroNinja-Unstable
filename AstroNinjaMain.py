@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 05/29/21
+   * Date Modified: 06/27/21
 """
 """
    * Changelog:
@@ -147,13 +147,13 @@ class App(QMainWindow):
         def stable():
             themeConfig.set('Updates', 'key1', 'Stable')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
 
         def unstable():
             themeConfig.set('Updates', 'key1', 'Unstable')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
 
 
@@ -163,21 +163,21 @@ class App(QMainWindow):
         def Marine():
             themeConfig.set('theme', 'key1', 'marine')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
         def Spacex():
             themeConfig.set('theme', 'key1', 'spaceX')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
         def broco():
             themeConfig.set('theme', 'key1', 'broco')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -190,7 +190,7 @@ class App(QMainWindow):
         def newest():
             themeConfig.set('articleSorting', 'key1', 'Newest')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -198,7 +198,7 @@ class App(QMainWindow):
         def oldest():
             themeConfig.set('articleSorting', 'key1', 'Oldest')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -211,7 +211,7 @@ class App(QMainWindow):
         def newestHubble():
             themeConfig.set('hubbleSorting', 'key1', 'Newest')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -219,7 +219,7 @@ class App(QMainWindow):
         def oldestHubble():
             themeConfig.set('hubbleSorting', 'key1', 'Oldest')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -251,9 +251,9 @@ class App(QMainWindow):
 
         global sortingSelected, HubblesortingSelected, versionSelected
 
-        if not os.path.isfile("config.ini"):
+        if not os.path.isfile(os.path.expanduser("~/.AstroNinja/config.ini")):
             themeConfig = ConfigParser()
-            themeConfig.read('config.ini')
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
             themeConfig.add_section('theme')
             themeConfig.set('theme', 'key1', 'spaceX')
             themeSelected = themeConfig.get('theme', 'key1')
@@ -271,11 +271,11 @@ class App(QMainWindow):
             themeConfig.set('Updates', 'key1', 'Stable')
             versionSelected = themeConfig.get('Updates', 'key1')
 
-            with open('config.ini', 'w') as f:
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
-        elif os.path.isfile("config.ini"):
+        elif os.path.isfile(os.path.expanduser("~/.AstroNinja/config.ini")):
             themeConfig = ConfigParser()
-            themeConfig.read("config.ini")
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
             themeSelected = themeConfig.get('theme', 'key1')
             # Getting the sorting setting last set by the user.
             #global sortingSelected
@@ -1379,7 +1379,7 @@ class App(QMainWindow):
         updateMenu = settingsMenu.addMenu('&Update Sources')
         updateMenu.addAction(stableAct)
         updateMenu.addAction(unstableAct)
-                
+
         self.statusBar()
         self.showMaximized()
         #self.show()
