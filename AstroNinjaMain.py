@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 06/27/21
+   * Date Modified: 06/28/21
 """
 """
    * Changelog:
@@ -144,17 +144,37 @@ class App(QMainWindow):
         """
             The functions for the Update options in the settings menu. Added in V0.90 Beta
         """
+        # initializing the variable the version selected will be saved to.
+        #versionSelected = ""
+
         def stable():
+            global versionSelected
             themeConfig.set('Updates', 'key1', 'Stable')
 
             with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
 
+            # An attempt to get the app to recognize that the settings has changed.
+            themeConfig = ConfigParser()
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+
+            # Getting the Update option selected by the user.
+            versionSelected = themeConfig.get('Updates', 'key1')
+
         def unstable():
+            global versionSelected
+
             themeConfig.set('Updates', 'key1', 'Unstable')
 
             with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
                 themeConfig.write(f)
+
+            # An attempt to get the app to recognize that the settings has changed.
+            themeConfig = ConfigParser()
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+
+            # Getting the Update option selected by the user.
+            versionSelected = themeConfig.get('Updates', 'key1')
 
 
         """
