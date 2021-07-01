@@ -141,41 +141,6 @@ class App(QMainWindow):
             os.execl(python, python, * sys.argv)
 
 
-        """
-            The functions for the Update options in the settings menu. Added in V0.90 Beta
-        """
-        # initializing the variable the version selected will be saved to.
-        #versionSelected = ""
-
-        def stable():
-            global versionSelected
-            themeConfig.set('Updates', 'key1', 'Stable')
-
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
-                themeConfig.write(f)
-
-            # An attempt to get the app to recognize that the settings has changed.
-            themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
-
-            # Getting the Update option selected by the user.
-            versionSelected = themeConfig.get('Updates', 'key1')
-
-        def unstable():
-            global versionSelected
-
-            themeConfig.set('Updates', 'key1', 'Unstable')
-
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
-                themeConfig.write(f)
-
-            # An attempt to get the app to recognize that the settings has changed.
-            themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
-
-            # Getting the Update option selected by the user.
-            versionSelected = themeConfig.get('Updates', 'key1')
-
 
         """
             The functions for the Theme menu items
@@ -269,7 +234,7 @@ class App(QMainWindow):
         # initialize
         # Checking if the config file is present, and making one if it isnt. This prevents the configuration from being over written.
 
-        global sortingSelected, HubblesortingSelected, versionSelected
+        global sortingSelected, HubblesortingSelected, versionSelected, themeConfig
 
         if not os.path.isfile(os.path.expanduser("~/.AstroNinja/config.ini")):
             themeConfig = ConfigParser()
@@ -304,6 +269,45 @@ class App(QMainWindow):
             HubblesortingSelected = themeConfig.get('hubbleSorting', 'key1')
             # Getting the Update option selected by the user.
             versionSelected = themeConfig.get('Updates', 'key1')
+
+
+
+        """
+            The functions for the Update options in the settings menu. Added in V0.90 Beta
+        """
+        # initializing the variable the version selected will be saved to.
+        #versionSelected = ""
+
+        def stable():
+            global versionSelected, themeConfig
+            themeConfig.set('Updates', 'key1', 'Stable')
+
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+                themeConfig.write(f)
+
+            # An attempt to get the app to recognize that the settings has changed.
+            themeConfig = ConfigParser()
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+
+            # Getting the Update option selected by the user.
+            versionSelected = themeConfig.get('Updates', 'key1')
+
+        def unstable():
+            global versionSelected, themeConfig
+
+            themeConfig.set('Updates', 'key1', 'Unstable')
+
+            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+                themeConfig.write(f)
+
+            # An attempt to get the app to recognize that the settings has changed.
+            themeConfig = ConfigParser()
+            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+
+            # Getting the Update option selected by the user.
+            versionSelected = themeConfig.get('Updates', 'key1')
+
+
 
         #===============================================================================================
             #A function for updating the app, to be added to main menu.
@@ -998,7 +1002,6 @@ class App(QMainWindow):
                     picUrl = urllib.parse.urlunsplit(picUrl)
 
 
-                    print(picUrl)
                     response = urllib.request.urlopen(picUrl)
 
                     # TO-DO: Test if this is no longer necessary if unicode characters are fixed.
