@@ -907,7 +907,7 @@ class App(QMainWindow):
         self.scheduleTab.setLayout(self.scheduleTab.layout)
 
         #============================================================================================================================
-        # The News tab, showing news articles scraped by xNews.py
+        # The News tab, showing news articles scraped by the two news spiders
         #============================================================================================================================
 
         self.spacexTab.layout =  QGridLayout()
@@ -926,8 +926,8 @@ class App(QMainWindow):
         def newsListBuilder(a, b, c, d, e):
 
             # Removing unwanted articles from space.com
-            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday']                        # The list of articles to look for
-            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
+            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday', 'deals and gifts']                        # The list of articles to look for
+            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a] or naughtyArticles[5] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
                 # Ends and moves on to the next article if found.
                 return
 
