@@ -6,7 +6,7 @@
 # Modified: 7/12/2021
 
 # First, we need to install the proper python 3 Libraries
-sudo dnf install -y python3-pip python3-pyqt5 python3-dateutil python3-tk python3-pyqt5-qtwebengine python3-setuptools
+sudo dnf install -y python3-pip python3-qt5 python3-dateutil  python3-qt5-webengine python3-setuptools
 
 # Next we install the libaries installed by pip
 python3 -m pip install matplotlib lxml scrapy
