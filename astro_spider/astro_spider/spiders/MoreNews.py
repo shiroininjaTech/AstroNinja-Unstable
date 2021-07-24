@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+import re
 
 class MorenewsSpider(scrapy.Spider):
     name = 'MoreNews_spider'
     allowed_domains = ['space.com']
     start_urls = ['https://www.space.com/tech-robots', 'https://www.space.com/science-astronomy']
-    #custom_settings = {'LOG_ENABLED': False,
-    #}
+    custom_settings = {'LOG_ENABLED': True,
+    }
 
     def parse(self, response):
         for article_url in response.xpath("//a[contains(@class, 'article-link')]//@href").extract():
@@ -31,6 +31,16 @@ class MorenewsSpider(scrapy.Spider):
         """
         for i in bodyItems:
             if "Related:" in i:
+                current = bodyItems.index(i) + 1        # The actual description, this is the index number
+                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
+                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
+
+            elif "Read more:" in i:
+                current = bodyItems.index(i) + 1        # The actual description, this is the index number
+                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
+                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
+
+            elif "In photos:" in i:
                 current = bodyItems.index(i) + 1        # The actual description, this is the index number
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
@@ -113,6 +123,29 @@ class MorenewsSpider(scrapy.Spider):
             imageUsed = altImage
         else:
             imageUsed = mainImage
+
+
+        """
+            Attempting to scrape video objects from Space.com articles.
+            Added V0.90 Beta
+        """
+        isVid = False
+        vidScrape = response.xpath("/html/body/div[2]/article/section/div[1]/div[4]/div/div/script").extract()
+        youtubeURL = response.xpath("//div//iframe//@src").extract()
+        #print(vidScrape)
+
+        if len(vidScrape) == 0 and len(youtubeURL) == 0:
+            isVid  = False
+            vidUrl = "Blank"
+
+        elif len(vidScrape) != 0:
+            isVid = True
+            vidUrl = vidScrape[0]
+
+        elif len(youtubeURL) != 0:
+            isVid = True
+            vidUrl = youtubeURL[0]
+
         article = {
             'title' : "".join(response.xpath("//h1//text()").extract()),
             'date'  : fixedDate,
@@ -125,3 +158,4 @@ class MorenewsSpider(scrapy.Spider):
 
 
         yield article
+#/html/body/div[2]/article/section/div[1]/div[1]/iframe
