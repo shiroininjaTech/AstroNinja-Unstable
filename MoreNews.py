@@ -40,6 +40,11 @@ class MorenewsSpider(scrapy.Spider):
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
 
+            elif "In photos:" in i:
+                current = bodyItems.index(i) + 1        # The actual description, this is the index number
+                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
+                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
+
             elif "Complete coverage:" in i:
                 current = bodyItems.index(i) + 1        # The actual description, this is the index number
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
