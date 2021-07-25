@@ -14,7 +14,7 @@ if [ -f /etc/os-release ]; then
     . /etc/os-release
     OS=$NAME
 
-echo $OS
+#echo $OS
 
 # If the user is running Linux Mint
 if [ "$OS" = "Fedora" ] ; then
