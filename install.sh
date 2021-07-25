@@ -57,19 +57,15 @@ else
   chmod +x /home/$USER/Desktop/AstroNinja.desktop
   chmod +x /home/$USER/.AstroNinja/AstroNinjaMain.py
 
-  # Getting which distro the user is running
-  if [ -f /etc/os-release ]; then
-      # freedesktop.org and systemd
-      . /etc/os-release
-      OS=$NAME
+fi
 
   #echo $OS
   # If the user is running Linux Mint
   if [ "$OS" = "Linux Mint" ] ; then
       # Removing an uneeded package that causes formatting errors in Linux Mint
       sudo apt-get remove qt5ct ;
-      fi
   fi
+  
 
 
 
