@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 07/01/21
+   * Date Modified: 08/22/21
 """
 """
    * Changelog:
@@ -996,6 +996,21 @@ class App(QMainWindow):
                     # Adding verticle spacing
                     vert_Spacer(scroll.layout, 250, 250)
 
+                elif picUrl == "/media/img/missing-image.svg":
+
+                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                    frameLayout.addItem(horizSpacer, 1, 2)
+                    frameLayout.addItem(horizSpacer, 2, 2)
+
+                    # Setting the label for the date of the article.
+                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
+
+                    # setting the label for the body of the article
+                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+
+                    # Adding verticle spacing
+                    vert_Spacer(scroll.layout, 250, 250)
                 else:
                     picUrl = list(urllib.parse.urlsplit(picUrl))
                     picUrl[2] = urllib.parse.quote(picUrl[2])
