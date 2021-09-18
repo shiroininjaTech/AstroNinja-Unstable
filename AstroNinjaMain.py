@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 08/22/21
+   * Date Modified: 09/18/21
 """
 """
    * Changelog:
@@ -975,7 +975,10 @@ class App(QMainWindow):
                     head, sep, tail = picUrl.partition('.jpeg')
                     picUrl = head+sep
 
-
+                elif '.gif' in picUrl:
+                    head, sep, tail = picUrl.partition('.gif')
+                    picUrl = head+sep
+                print(picUrl)
 
                 # FIXED IN VERSION 0.85: fixes inability to load urls that contain
                 # non-unicode characters by using the parse module in the urllib library.
