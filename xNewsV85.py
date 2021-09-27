@@ -7,7 +7,7 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 11/04/20
+   * Modified: 09/27/21
 """
 import re
 from dateutil import parser
@@ -113,7 +113,8 @@ def hubbleViewz(sorter):
         for i in hubbleDict['hubbleImage']:
             images.append(i)
         for i in hubbleDict['hubbleDescrip']:
-            descriptions.append(i)
+            head, sep, tail = i.partition("Links Video")                    # doing a final scrub of the image description
+            descriptions.append(head)                                       # removing the link text from the end of the description.
         for i in hubbleDict['header']:
             headers.append(i)
 
