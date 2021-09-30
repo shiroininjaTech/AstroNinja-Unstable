@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 09/19/21
+   * Date Modified: 09/30/21
 """
 """
    * Changelog:
@@ -1183,8 +1183,8 @@ class App(QMainWindow):
         frameBuilder(frameLayout, 2, 1, 450, True)              # Creating the inner frame
         self.frame.setLineWidth(5)
 
-        headerMessage = "HDEV Camera Description"
-        technicalDescrip = "\tActivated on April 30, 2014, the primary purpose of the High Definition Earth-Viewing System (HDEV) is to monitor the rate at which HD video image quality degrades when exposed to the harsh environment of space, mainly cosmic ray damage. Unfortunatly, the HDEV experiment reached End of Life in 2019, but rejoice space fans! The project maintainers continue to keep previously recorded video available.\n\tThe cameras cycle from one to the next, providing a view looking forward, one straight down on our gorgeous home, and 2 looking back for that rear-facing perspective. You may even spot a docked vehicle or two!\n"
+        headerMessage = "HDEV Camera"
+        technicalDescrip = "\tActivated on April 30, 2014, the primary purpose of the High Definition Earth-Viewing System (HDEV) is to monitor the rate at which HD video image quality degrades when exposed to the harsh environment of space, mainly cosmic ray damage. Unfortunatly, the HDEV experiment reached End of Life in 2019, but rejoice space fans! Live views of our beautiful home can be enjoyed through another camera mounted elsewhere on the ISS.\n\tThis new camera presents a new view in which one may occasionally spot a solar panel.\n"
         blackHead = "Why is the window black?\n"
         descrip = "\tDon't fear! The ISS is currently passing over the night side of the Earth. The view usually brightens again a few minutes, and sometimes we're treated with a sunrise!"
         powerHead = "What is this screen?\n"
