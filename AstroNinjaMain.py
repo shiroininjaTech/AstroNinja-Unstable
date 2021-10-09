@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 09/30/21
+   * Date Modified: 10/09/21
 """
 """
    * Changelog:
@@ -477,7 +477,7 @@ class App(QMainWindow):
             self.label.setWordWrap(True)
             self.label.setMaximumWidth(450)
             self.label.setFont(basicFont)
-            frameLayout.addWidget(self.label, xCord, yCord)
+            layout.addWidget(self.label, xCord, yCord)
 
         # Adding the most recent Label
         def get_recent():
@@ -1254,7 +1254,7 @@ class App(QMainWindow):
 
         frameLayout.addWidget(self.expeditionLogoLarge, 0, 1)
 
-        scrollBuilder(frameLayout, 2, 1)
+
 
         vert_Spacer(scroll.layout, 150, 50)         # spacer that goes around profiles.
 
@@ -1264,23 +1264,39 @@ class App(QMainWindow):
         # Takes iteratorX as a counter for facilitating the moving on to a new column as needed in the layout.
         def profileBuilder(crewVar, iteratorY):
 
+
             # Building the outer frame
 
-            frameBuilder(scroll.layout, iteratorY, 1, 200, True)
+            frameBuilder(scroll.layout, iteratorY, 1, 200, False)
             #self.frame.setMaximumWidth(900)
+
+            # creating the scroll area the bios will be kept in.
+            # To-Do: find a better naming scheme and see if I can't just use the scrollBuilder function.
+            scroll2 = QScrollArea(self)
+
+            frameLayout.addWidget(scroll2, 0, 2)
+
+            scroll2.setWidgetResizable(True)
+            scroll2.setMinimumWidth(700)
+            scrollContent2 = QWidget(scroll2)
+            scroll2.layout2 = QGridLayout(scrollContent2)
+            scrollContent2.setLayout(scroll2.layout2)
+
+            scroll2.setWidget(scrollContent2)
+
             #building the label for the bio
-            smallItems = "Place of Birth: {}\n\nNationality: {} {}".format(issPortal.crewLocation[crewVar], issPortal.crewNat[crewVar], issPortal.shortBio[crewVar])
-            genLabel(smallItems, 1, 1, frameLayout)
+            smallItems = "Place of Birth: {}\n\nNationality: {} {}\n {}".format(issPortal.crewLocation[crewVar], issPortal.crewNat[crewVar], issPortal.shortBio[crewVar], issPortal.shortBio2[crewVar])
+            genLabel(smallItems, 0, 0, scroll2.layout2)
             self.label.setMargin(0)
             self.label.setMinimumWidth(700)
-            genLabel(issPortal.shortBio2[crewVar], 2, 1, frameLayout)
-            self.label.setMargin(0)
-            self.label.setMinimumWidth(700)
+            #genLabel(issPortal.shortBio2[crewVar], 1, 0, frameLayout)
+            #self.label.setMargin(0)
+            #self.label.setMinimumWidth(700)
 
             # Adding spacers to the layout
-            horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+            #horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
             frameLayout.addItem(horizSpacer, 4, 1)
-            vert_Spacer(frameLayout, 200, 200)
+            vert_Spacer(frameLayout, 100, 100)
 
 
             # Building the inner frame
