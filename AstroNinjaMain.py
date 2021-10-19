@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 10/09/21
+   * Date Modified: 10/19/21
 """
 """
    * Changelog:
@@ -471,7 +471,7 @@ class App(QMainWindow):
         # (xCord and yCord) are the coordinates the label is to be placed at
         # (layout) is the object the label is to be placed in.
         def genLabel(stringVar,xCord, yCord, layout):
-            # Creating the black screen explanation label
+
             self.label = QLabel(stringVar, self)
             self.label.adjustSize()
             self.label.setWordWrap(True)
@@ -999,7 +999,7 @@ class App(QMainWindow):
                     # Adding verticle spacing
                     vert_Spacer(scroll.layout, 250, 250)
 
-                elif picUrl == "/media/img/missing-image.svg":
+                elif "missing-image.svg" in picUrl:
 
                     horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
                     frameLayout.addItem(horizSpacer, 1, 2)
@@ -1019,6 +1019,7 @@ class App(QMainWindow):
                     picUrl[2] = urllib.parse.quote(picUrl[2])
                     picUrl = urllib.parse.urlunsplit(picUrl)
 
+                    print(picUrl)
 
                     response = urllib.request.urlopen(picUrl)
 
@@ -1267,7 +1268,7 @@ class App(QMainWindow):
 
             # Building the outer frame
 
-            frameBuilder(scroll.layout, iteratorY, 1, 200, False)
+            frameBuilder(scroll.layout, iteratorY, 1, 200, True)
             #self.frame.setMaximumWidth(900)
 
             # creating the scroll area the bios will be kept in.
@@ -1277,7 +1278,7 @@ class App(QMainWindow):
             frameLayout.addWidget(scroll2, 0, 2)
 
             scroll2.setWidgetResizable(True)
-            scroll2.setMinimumWidth(700)
+            #scroll2.setMinimumWidth(700)
             scrollContent2 = QWidget(scroll2)
             scroll2.layout2 = QGridLayout(scrollContent2)
             scrollContent2.setLayout(scroll2.layout2)
@@ -1294,9 +1295,9 @@ class App(QMainWindow):
             #self.label.setMinimumWidth(700)
 
             # Adding spacers to the layout
-            #horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+            horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
             frameLayout.addItem(horizSpacer, 4, 1)
-            vert_Spacer(frameLayout, 100, 100)
+            vert_Spacer(frameLayout, 200, 200)
 
 
             # Building the inner frame
