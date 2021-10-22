@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 10/19/21
+   * Date Modified: 10/22/21
 """
 """
    * Changelog:
@@ -1019,7 +1019,6 @@ class App(QMainWindow):
                     picUrl[2] = urllib.parse.quote(picUrl[2])
                     picUrl = urllib.parse.urlunsplit(picUrl)
 
-                    print(picUrl)
 
                     response = urllib.request.urlopen(picUrl)
 
@@ -1240,7 +1239,7 @@ class App(QMainWindow):
         frameBuilder(scroll.layout, 1, 1, 750, False )
 
         # the header
-        crewHead = "Current Expedition Crew                                                         Expedition 65"
+        crewHead = "Current Expedition Crew                                                         Expedition 66"
         #self.resLabel = QLabel("Current ISS Residents\n\nExpedition 62", self)
         headerBuild(crewHead, 1, 1, frameLayout, 70)
 
