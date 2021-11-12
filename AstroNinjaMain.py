@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 10/22/21
+   * Date Modified: 11/11/21
 """
 """
    * Changelog:
@@ -1237,7 +1237,7 @@ class App(QMainWindow):
         issPortal.rollCall()
 
         frameBuilder(scroll.layout, 1, 1, 750, False )
-
+        self.frame.setMaximumHeight(300)
         # the header
         crewHead = "Current Expedition Crew                                                         Expedition 66"
         #self.resLabel = QLabel("Current ISS Residents\n\nExpedition 62", self)
@@ -1259,6 +1259,10 @@ class App(QMainWindow):
         vert_Spacer(scroll.layout, 150, 50)         # spacer that goes around profiles.
 
         scroll.setMinimumHeight(900)
+
+        scrollBuilder(scroll.layout, 2, 1)
+
+        scroll.setMinimumHeight(600)
         # This function builds the gui item for each resident's profile
         # takes iteratorY for iterating through each astronaut's data and for setting the Y position in the layout
         # Takes iteratorX as a counter for facilitating the moving on to a new column as needed in the layout.
@@ -1267,17 +1271,17 @@ class App(QMainWindow):
 
             # Building the outer frame
 
-            frameBuilder(scroll.layout, iteratorY, 1, 200, True)
+            #frameBuilder(scroll.layout, iteratorY, 1, 200, True)
             #self.frame.setMaximumWidth(900)
 
             # creating the scroll area the bios will be kept in.
             # To-Do: find a better naming scheme and see if I can't just use the scrollBuilder function.
             scroll2 = QScrollArea(self)
 
-            frameLayout.addWidget(scroll2, 0, 2)
+            scroll.layout.addWidget(scroll2, iteratorY, 1)
 
             scroll2.setWidgetResizable(True)
-            #scroll2.setMinimumWidth(700)
+            scroll2.setMinimumWidth(850)
             scrollContent2 = QWidget(scroll2)
             scroll2.layout2 = QGridLayout(scrollContent2)
             scrollContent2.setLayout(scroll2.layout2)
@@ -1286,21 +1290,21 @@ class App(QMainWindow):
 
             #building the label for the bio
             smallItems = "Place of Birth: {}\n\nNationality: {} {}\n {}".format(issPortal.crewLocation[crewVar], issPortal.crewNat[crewVar], issPortal.shortBio[crewVar], issPortal.shortBio2[crewVar])
-            genLabel(smallItems, 0, 0, scroll2.layout2)
+            genLabel(smallItems, 1, 0, scroll2.layout2)
             self.label.setMargin(0)
             self.label.setMinimumWidth(700)
             #genLabel(issPortal.shortBio2[crewVar], 1, 0, frameLayout)
             #self.label.setMargin(0)
             #self.label.setMinimumWidth(700)
 
-            # Adding spacers to the layout
+            #Adding spacers to the layout
             horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
             frameLayout.addItem(horizSpacer, 4, 1)
             vert_Spacer(frameLayout, 200, 200)
 
 
             # Building the inner frame
-            frameBuilder(frameLayout, 0, 1, 200, True)
+            frameBuilder(scroll.layout, iteratorY, 0, 200, True)
             self.frame.setMaximumHeight(800)     # setting maximum height
             #self.frame.setAlignment(QtCore.Qt.AlignCenter)
             # building the image object for the portrait
