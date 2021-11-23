@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/11/21
+   * Date Modified: 11/22/21
 """
 """
    * Changelog:
@@ -599,7 +599,7 @@ class App(QMainWindow):
             if max(tallies) == 0:
                     plt.yticks(np.arange(0, 2), color=fg_color)
             else:
-                plt.yticks(np.arange(max(tallies) + 2), color=fg_color)
+                plt.yticks(np.arange(0, max(tallies) + 2, 5.0), color=fg_color)
 
             #plt.style.use(u'dark_background')
             ax.patch.set_facecolor(bg_color)
