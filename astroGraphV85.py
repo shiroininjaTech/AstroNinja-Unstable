@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 01/10/21
+   * Date Modified: 01/01/22
 """
 
 import AstroNinjaMain
@@ -191,7 +191,7 @@ def tally_ho(x, y):
 
 
     # Haven't found fixes for these, so they're skipped for now.
-    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2019']
+    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2022']
 
 
     # Iterate over scheduleList until finished
@@ -217,7 +217,7 @@ def tally_ho(x, y):
                 y += 4
 
 
-        elif 'Mid-' in astroNinjaV85.scheduleList[x] and 'Mid-2019' not in astroNinjaV85.scheduleList[x]:
+        elif 'Mid-' in astroNinjaV85.scheduleList[x] and 'Mid-2022' not in astroNinjaV85.scheduleList[x]:
             later = astroNinjaV85.scheduleList[x].replace('Mid-', '') # removing breaking characters
             slicy = later[0:3]
 

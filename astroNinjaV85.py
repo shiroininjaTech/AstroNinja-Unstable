@@ -9,7 +9,7 @@ from __future__ import unicode_literals
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 10/03/17
-   * Date Modified: 01/07/2021
+   * Date Modified: 01/01/22
 """
 """
    * Changelog:
@@ -134,7 +134,7 @@ def armStrong():
         # Temporary fix for parsed date showing the current year instead of the next
         # year
         if int(todaydateStr[5:7]) == 12 and int(changedateStr[5:7]) < 12:
-            changedSlice = changedateStr.replace('2020', '2021')
+            changedSlice = changedateStr.replace('2021', '2022')
             changedSlice = changedSlice[0:10]
 
     # a function that compares the launch date to the current date so
@@ -278,7 +278,7 @@ def update_launch(counter):
     # Temporary fix for parsed date showing the current year instead of the next
     # year
     if int(todaydateStr[5:7]) == 12 and int(changedateStr[5:7]) < 12:
-        changedSlice = changedateStr.replace('2019', '2020')
+        changedSlice = changedateStr.replace('2021', '2022')
         changedSlice = changedSlice[0:10]
 
     global comparedList

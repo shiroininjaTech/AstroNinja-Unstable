@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/22/21
+   * Date Modified: 01/01/22
 """
 """
    * Changelog:
@@ -787,7 +787,7 @@ class App(QMainWindow):
         #=============================================================================================================================
 
         # Running function that scrapes launch history in the backend module
-        astroGraphV85.historian('2021')
+        astroGraphV85.historian('2022')
 
         # The tallies
         historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.ilsCount]
@@ -795,7 +795,7 @@ class App(QMainWindow):
         # The Organizations
         orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin', 'ILS')
 
-        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2021 by Organization\n', orgs, scroll.layout, itemPosition, 1)
+        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2022 by Organization\n', orgs, scroll.layout, itemPosition, 1)
         itemPosition += 1
         #=================================================================================================
         # Creating the third graph, which shows  the total launches for the previous year
@@ -803,12 +803,12 @@ class App(QMainWindow):
         #=================================================================================================
 
         # Running function that scrapes launch history in the backend module
-        astroGraphV85.historian('2020')
+        astroGraphV85.historian('2021')
 
         # The tallies
         historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.ilsCount]
 
-        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2020 by Organization\n', orgs, scroll.layout, itemPosition, 1)
+        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2021 by Organization\n', orgs, scroll.layout, itemPosition, 1)
 
         self.welcomeTab.setLayout(self.welcomeTab.layout)
         #=================================================================================================
@@ -1220,12 +1220,7 @@ class App(QMainWindow):
 
 
         # Creating the black screen explanation label
-        #self.screenLabel = QLabel(screenDesc, self)
-        #self.screenLabel.adjustSize()
-        #self.screenLabel.setWordWrap(True)
-        #self.screenLabel.setMaximumWidth(450)
-        #self.screenLabel.setFont(basicFont)
-        #frameLayout.addWidget(self.screenLabel, 7, 0)
+
         label_maker(screenDesc, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 7, 0)
         #horizSpacer = QSpacerItem(20, 20, QSizePolicy.Maximum, QSizePolicy.Expanding)
         #frameLayout.addItem(horizSpacer, 3, 2)
@@ -1258,11 +1253,6 @@ class App(QMainWindow):
 
         vert_Spacer(scroll.layout, 150, 50)         # spacer that goes around profiles.
 
-        scroll.setMinimumHeight(900)
-
-        scrollBuilder(scroll.layout, 2, 1)
-
-        scroll.setMinimumHeight(600)
         # This function builds the gui item for each resident's profile
         # takes iteratorY for iterating through each astronaut's data and for setting the Y position in the layout
         # Takes iteratorX as a counter for facilitating the moving on to a new column as needed in the layout.
@@ -1271,17 +1261,22 @@ class App(QMainWindow):
 
             # Building the outer frame
 
-            #frameBuilder(scroll.layout, iteratorY, 1, 200, True)
-            #self.frame.setMaximumWidth(900)
+            frameBuilder(scroll.layout, iteratorY, 1, 200, True)
+            self.frame.setMinimumWidth(800)
+            self.frame.setMinimumHeight(500)
 
+            verticalSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+            frameLayout.addItem(verticalSpacer, 3, 1)
             # creating the scroll area the bios will be kept in.
             # To-Do: find a better naming scheme and see if I can't just use the scrollBuilder function.
-            scroll2 = QScrollArea(self)
+            scroll2 = QScrollArea()
 
-            scroll.layout.addWidget(scroll2, iteratorY, 1)
+            frameLayout.addWidget(scroll2, 0, 1)
 
             scroll2.setWidgetResizable(True)
-            scroll2.setMinimumWidth(850)
+            scroll2.setMinimumWidth(700)
+            scroll2.setMaximumWidth(800)
+            scroll2.setMinimumHeight(500)
             scrollContent2 = QWidget(scroll2)
             scroll2.layout2 = QGridLayout(scrollContent2)
             scrollContent2.setLayout(scroll2.layout2)
@@ -1293,19 +1288,17 @@ class App(QMainWindow):
             genLabel(smallItems, 1, 0, scroll2.layout2)
             self.label.setMargin(0)
             self.label.setMinimumWidth(700)
-            #genLabel(issPortal.shortBio2[crewVar], 1, 0, frameLayout)
-            #self.label.setMargin(0)
-            #self.label.setMinimumWidth(700)
+
 
             #Adding spacers to the layout
-            horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-            frameLayout.addItem(horizSpacer, 4, 1)
-            vert_Spacer(frameLayout, 200, 200)
+            #horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+            #frameLayout.addItem(horizSpacer, 4, 1)
+            #vert_Spacer(frameLayout, 200, 200)
 
 
             # Building the inner frame
-            frameBuilder(scroll.layout, iteratorY, 0, 200, True)
-            self.frame.setMaximumHeight(800)     # setting maximum height
+            frameBuilder(frameLayout, 0, 0, 200, True)
+            self.frame.setMinimumHeight(500)     # setting maximum height
             #self.frame.setAlignment(QtCore.Qt.AlignCenter)
             # building the image object for the portrait
             self.image = QLabel(self)
@@ -1328,8 +1321,9 @@ class App(QMainWindow):
             frameLayout.addWidget(self.expeditionLogo, 0, 1)
             # the header that contains the astronaut's name
             headerBuild(issPortal.crewName[crewVar], 0, 0, frameLayout, 70)
+            self.label.setMinimumHeight(200)
             self.label.setMargin(0)
-            vert_Spacer(frameLayout, 70, 20)
+            #vert_Spacer(frameLayout, 70, 20)
             return
 
         global crewIt, xIt
