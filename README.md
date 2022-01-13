@@ -4,7 +4,7 @@ AstroNinja is an all-around tracker of the space industry. It has launch schedul
 
 ## Installation
 
-### Debian-based Distros
+### Debian-based Distros and Fedora
 Linux Mint/Ubuntu/Pop!OS
 
 - Open the terminal and clone this repository to your directory of choice:
@@ -25,28 +25,7 @@ chmod +x install.sh
 nano ~/Desktop/AstroNinja.desktop
 ```
 
-### Fedora
 
-- Open the terminal and clone this repository to your directory of choice:
-```bash
-cd ~/Downloads/
-git clone https://github.com/shiroininjaTech/AstroNinja-Unstable.git
-cd AstroNinja-Unstable/
-```
-- Use chmod to change the permissions of the installation file and run it:
-```bash
-chmod +x installFedora.sh
-./installFedora.sh
-```
-
-- Change username to your username in "icon" and "application" lines in the AstroNinja.desktop file using nano or a text editor:
-
-```bash
-nano ~/Desktop/AstroNinja.desktop
-```
-
-
-### Use AstroNinja
 
 ### Use AstroNinja
 Ubuntu and Pop users: right-click on AstroNinja desktop icon and click "Allow Launching".
