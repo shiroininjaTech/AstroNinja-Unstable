@@ -23,15 +23,16 @@ class MorenewsSpider(scrapy.Spider):
         fixedDate = head                                                                # Getting the head, which is everything in front of the partition (the actual date)
 
         # Removing the Related: inserts from the articles.
-        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]//p//text()").getall()]
+        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]//p/text()").getall()]
 
         """
             Iterating through body items, looking for descriptions of related articles,
             and removing them when found.
         """
         for i in bodyItems:
+
             if "Related:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
+                current = bodyItems.index(i) + 2        # The actual description, this is the index number
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
 
@@ -41,7 +42,7 @@ class MorenewsSpider(scrapy.Spider):
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
 
             elif "Photos:" in i:
-                current = bodyItems.index(i) + 1        
+                current = bodyItems.index(i) + 1
                 bodyItems.pop(current)
                 bodyItems.pop(bodyItems.index(i))
 
@@ -55,15 +56,16 @@ class MorenewsSpider(scrapy.Spider):
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
 
+
             elif "Video:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
+                current = bodyItems.index(i) + 1
+                bodyItems.pop(current)
+                bodyItems.pop(bodyItems.index(i))
 
             elif "Additional resources:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
+                current = bodyItems.index(i) + 1
+                bodyItems.pop(current)
+                bodyItems.pop(bodyItems.index(i))
 
             elif "OFFER:" in i:
                 current = bodyItems.index(i) + 1        # The actual description, this is the index number
@@ -106,6 +108,12 @@ class MorenewsSpider(scrapy.Spider):
                 bodyItems.pop(current2)
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))
+
+            elif "Watch:" in i:
+                current = bodyItems.index(i) + 1
+                bodyItems.pop(current)
+                bodyItems.pop(bodyItems.index(i))
+
         # Getting the different types of possible images
         mainImage = "".join(response.xpath("//div[contains(@class, 'box')]//img/@src").extract())
         altImage  = response.xpath("//p[contains(@class, 'vanilla-image-block')]//img/@data-original-mos").extract()[0]
