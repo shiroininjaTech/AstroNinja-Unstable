@@ -116,7 +116,28 @@ class MorenewsSpider(scrapy.Spider):
 
         # Getting the different types of possible images
         mainImage = "".join(response.xpath("//div[contains(@class, 'box')]//img/@src").extract())
-        altImage  = response.xpath("//p[contains(@class, 'vanilla-image-block')]//img/@data-original-mos").extract()[0]
+        altImage  = response.xpath("//img[contains(@class, 'expandable lazy-image-van')]/@data-srcset").get()
+
+
+        # If the page doen't have one format of an image, try the other format.
+        if mainImage == "/media/img/missing-image.svg":
+            imageUsed = altImage
+        else:
+            imageUsed = mainImage
+
+        # trimming the found urls down to a single URL.
+        if '.jpg' in imageUsed:
+            head, sep, tail = imageUsed.partition('.jpg')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep
+
+        elif '.jpeg' in imageUsed:
+            head, sep, tail = imageUsed.partition('.jpeg')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep
+
+        elif '.png' in imageUsed:
+            head, sep, tail = imageUsed.partition('.png')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep
+
 
 
         # Fixing the spacing of the items, so smaller items don't get indented.
@@ -132,10 +153,7 @@ class MorenewsSpider(scrapy.Spider):
             else:
                 betterSpaced.append(" " + i)
 
-        if len(mainImage) == 0:
-            imageUsed = altImage
-        else:
-            imageUsed = mainImage
+
 
 
         """
@@ -163,7 +181,7 @@ class MorenewsSpider(scrapy.Spider):
             'title' : "".join(response.xpath("//h1//text()").extract()),
             'date'  : fixedDate,
             'body'  : "".join(betterSpaced),
-            'image'   : imageUsed,
+            'image'   : fixedImg,
 
         }
 
