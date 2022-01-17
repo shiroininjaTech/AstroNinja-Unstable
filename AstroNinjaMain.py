@@ -1302,7 +1302,11 @@ class App(QMainWindow):
             #self.frame.setAlignment(QtCore.Qt.AlignCenter)
             # building the image object for the portrait
             self.image = QLabel(self)
-            image = urllib.request.urlopen(issPortal.crewImg[crewVar]).read()
+            headers = {}
+            headers['User-Agent'] = "AstroNinjaBio (https://github.com/shiroininjaTech/AstroNinja-Stable; twmulli2513@gmail.com) scrapy"
+            imageReq = urllib.request.Request(issPortal.crewImg[crewVar], headers = headers)
+            imageOpener = urllib.request.urlopen(imageReq)
+            image = imageOpener.read()
             artmap = QPixmap()
             artmap.loadFromData(image)
             self.image.setPixmap(artmap)
