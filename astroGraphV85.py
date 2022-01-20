@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 01/01/22
+   * Date Modified: 01/19/22
 """
 
 import AstroNinjaMain
@@ -392,7 +392,7 @@ def historian(year):
     sortedRussia = datlistFix('russiaDate')
     sortedNorthrop = datlistFix('northropDate')
     sortedBlue   = datlistFix('blueDate')
-    sortedIls    = datlistFix('ilsDate')
+    sortedVirgin    = datlistFix('virginDate')
     sortedRusMil = datlistFix('rusMil')
     sortedRussia = sortedRussia + sortedRusMil          # Adding Russian Military launches to the Russian list.
     sortedRussia = list(dict.fromkeys(sortedRussia))    # Removing duplicates.
@@ -412,7 +412,7 @@ def historian(year):
     global arianeCount
     global russiaCount
     global northCount
-    global blueOrigin, ilsCount
+    global blueOrigin, virginCount
 
     spaceXCount = 0
     chinaCount = 0
@@ -424,7 +424,7 @@ def historian(year):
     russiaCount = 0
     northCount = 0
     blueOrigin = 0
-    ilsCount = 0
+    virginCount = 0
     #milCount = 0
     #yearVar = '2019'
 
@@ -451,7 +451,7 @@ def historian(year):
     russiaCount = pastTally(sortedRussia, russiaCount, year)
     northCount  = pastTally(sortedNorthrop, northCount, year)
     blueOrigin  = pastTally(sortedBlue, blueOrigin, year)
-    ilsCount    = pastTally(sortedIls, ilsCount, year)
+    virginCount    = pastTally(sortedVirgin, virginCount, year)
     #milCount    = pastTally(sortedRusMil, milCount, year)
     #russiaCount = russiaCount + milCount
     """

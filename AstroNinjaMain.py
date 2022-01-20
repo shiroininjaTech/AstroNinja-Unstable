@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 01/01/22
+   * Date Modified: 01/19/22
 """
 """
    * Changelog:
@@ -525,6 +525,8 @@ class App(QMainWindow):
                 nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/northop.png")
             elif 'Virgin Orbit' in  x:
                 nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/virginorbit.png")
+            elif 'Astra' in x:
+                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/astra.png")
             else:
                 nextLogo = ''
             return nextLogo
@@ -790,10 +792,10 @@ class App(QMainWindow):
         astroGraphV85.historian('2022')
 
         # The tallies
-        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.ilsCount]
+        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
 
         # The Organizations
-        orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin', 'ILS')
+        orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin', 'Virgin\nOrbit')
 
         graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2022 by Organization\n', orgs, scroll.layout, itemPosition, 1)
         itemPosition += 1
@@ -806,7 +808,7 @@ class App(QMainWindow):
         astroGraphV85.historian('2021')
 
         # The tallies
-        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.ilsCount]
+        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
 
         graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2021 by Organization\n', orgs, scroll.layout, itemPosition, 1)
 
@@ -1302,6 +1304,8 @@ class App(QMainWindow):
             #self.frame.setAlignment(QtCore.Qt.AlignCenter)
             # building the image object for the portrait
             self.image = QLabel(self)
+
+            # Had to redo how image urls are loaded so I could ad a User Agent so that we comply with wikipedia's policies.
             headers = {}
             headers['User-Agent'] = "AstroNinjaBio (https://github.com/shiroininjaTech/AstroNinja-Stable; twmulli2513@gmail.com) scrapy"
             imageReq = urllib.request.Request(issPortal.crewImg[crewVar], headers = headers)
