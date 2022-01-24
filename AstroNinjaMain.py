@@ -253,7 +253,7 @@ class App(QMainWindow):
 
             # Adding a section in the config.ini for storing update options.
             themeConfig.add_section('Updates')
-            themeConfig.set('Updates', 'key1', 'Stable')
+            themeConfig.set('Updates', 'key1', 'Unstable')
             versionSelected = themeConfig.get('Updates', 'key1')
 
             with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
