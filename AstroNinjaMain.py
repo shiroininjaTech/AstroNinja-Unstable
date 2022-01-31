@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 01/23/22
+   * Date Modified: 01/30/22
 """
 """
    * Changelog:
@@ -1174,8 +1174,8 @@ class App(QMainWindow):
         frameBuilder(scroll.layout, 0, 1, 750, False)
         vert_Spacer(scroll.layout, 150, 50)
         frameLayout.addWidget(self.issView, 2, 0)
-        horizSpacer = QSpacerItem(20, 20, QSizePolicy.Maximum, QSizePolicy.Expanding)
-        frameLayout.addItem(horizSpacer, 3, 0)
+
+
 
 
         # building the header frame
@@ -1227,13 +1227,64 @@ class App(QMainWindow):
         #horizSpacer = QSpacerItem(20, 20, QSizePolicy.Maximum, QSizePolicy.Expanding)
         #frameLayout.addItem(horizSpacer, 3, 2)
 
+
+        """
+            Creating the ISS tracker section
+        """
+        frameBuilder(scroll.layout, 1, 1, 750, False)
+
+        verticalSpacer = QSpacerItem(100, 100, QSizePolicy.Maximum, QSizePolicy.Expanding)
+        frameLayout.addItem(verticalSpacer, 0, 0)
+        frameLayout.addItem(verticalSpacer, 0, 3)
+
+        # Adding an ISS Tracker as a Web object.
+        mapUrl = "https://isstracker.spaceflight.esa.int/"
+        trackerHTML = "<body padding='0px' style='background-color: #778899; max-height: 350; max-width: 625;'> <iframe width='100%' height='100%' allowtransparency='true' style='background: Darkslategray; position: fixed; top:0; left:0; bottom:0; right:0;' src='{}' frameborder='0' scrolling='no' allowfullscreen></iframe>".format(mapUrl)
+        web_wrapper(trackerHTML, 100, frameLayout, 0, 1, True)
+        self.webView.setMaximumWidth(630)
+        self.webView.setMaximumHeight(350)
+
+
+        # Building the "Fun facts" section
+        frameBuilder(frameLayout, 0, 2, 450, True)
+        self.frame.setLineWidth(5)
+
+        # The strings for the facts labels.
+        speed = "The International Space Station orbits the Earth every 90 minutes, travelling at 5 miles per second."
+        orbit = "The station orbits our planet 16 times a day."
+        altitude = "The ISS resides about 250 miles from Earth. On average, it takes about six hours to reach the station from Earth."
+        headerStr = "ISS Fun Facts"
+
+        #Building and placing the labels.
+        headerBuild(headerStr, 0, 0, frameLayout, 100)
+        label_maker(speed, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 1, 0)
+        # Throwing in a divider
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 5, 0)
+
+        frameLayout.addWidget(hDivider, 2, 0)
+        label_maker(orbit, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 3, 0)
+        # Throwing in a divider
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 5, 0)
+
+        frameLayout.addWidget(hDivider, 4, 0)
+        label_maker(altitude, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 5, 0)
+
+
+
+
         """
             Building the current residents section
 
         """
         issPortal.rollCall()
 
-        frameBuilder(scroll.layout, 1, 1, 750, False )
+        frameBuilder(scroll.layout, 2, 1, 750, False )
         self.frame.setMaximumHeight(300)
         # the header
         crewHead = "Current Expedition Crew                                                         Expedition 66"
@@ -1339,7 +1390,7 @@ class App(QMainWindow):
         crewIt = 0
 
         # xIt is for iterating through x coordinates
-        xIt = 2
+        xIt = 3
 
         # The function that runs profileBuilder and iterates to the next crew profile.
         # takes the above iterator variables as arguments
