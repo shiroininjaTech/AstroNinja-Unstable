@@ -15,10 +15,26 @@ class NewsSpiderSpider(scrapy.Spider):
 
 
     def parse_article(self, response):
+        # Eliminating too small of paragraphs.
+
+        bodyList = []
+
+        # For each <p> Item found
+        for i in response.xpath("//p//text()").getall():
+            # Strip excess spaces
+            i.strip()
+            # IF the item is too small to stand alone.
+            if len(i) < 200:
+                # Don't add newlines or a tab
+                bodyList.append(i)
+            #but if it is the right size, add those things.    
+            else:
+                bodyList.append("\n\n\t" + i)
+
         article = {
             'title' : response.xpath("//h1[contains(@class, 'post-title')]//text()").extract()[0],
             'date'  : response.xpath("//time//text()").extract()[0],
-            'body'  : "\n\n\t".join([i.strip() for i in response.xpath("//p//text()").getall()]),
+            'body'  : " ".join(bodyList),
             'image'   : "".join(response.xpath("//figure[contains(@class, 'featured wp-caption')]//img/@src").extract())
 
         }
