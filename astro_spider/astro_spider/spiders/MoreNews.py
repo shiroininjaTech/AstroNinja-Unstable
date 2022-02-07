@@ -23,7 +23,7 @@ class MorenewsSpider(scrapy.Spider):
         fixedDate = head                                                                # Getting the head, which is everything in front of the partition (the actual date)
 
         # Removing the Related: inserts from the articles.
-        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]//p/text()").getall()]
+        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]/p//text()").getall()]
 
         """
             Iterating through body items, looking for descriptions of related articles,
@@ -32,7 +32,7 @@ class MorenewsSpider(scrapy.Spider):
         for i in bodyItems:
 
             if "Related:" in i:
-                current = bodyItems.index(i) + 2        # The actual description, this is the index number
+                current = bodyItems.index(i) + 1        # The actual description, this is the index number
                 bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
                 bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
 
