@@ -142,16 +142,15 @@ class MorenewsSpider(scrapy.Spider):
 
         # Fixing the spacing of the items, so smaller items don't get indented.
         betterSpaced = []
-        """
-        for i in bodyItems:
-            print(i)
-        """
+
+
+
         for i in bodyItems:
             # Only newline and indent if over 25 characters
             if len(i) > 25:
-                betterSpaced.append("\n\n\t" + i)
+                betterSpaced.append("\n\n\t" + i.replace("(opens in new tab)", ""))
             else:
-                betterSpaced.append(" " + i)
+                betterSpaced.append(" " + i.replace("(opens in new tab)", ""))
 
 
 
