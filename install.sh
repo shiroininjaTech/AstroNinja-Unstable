@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 10/01/2018
-# Modified: 07/25/2021
+# Modified: 04/10/2022
 
 
 # Testing for addition of an option to install on Fedora
@@ -16,8 +16,8 @@ if [ -f /etc/os-release ]; then
 
 #echo $OS
 
-# If the user is running Linux Mint
-if [ "$OS" = "Fedora" ] ; then
+# If the user is running Fedora
+if [ "$OS" = "Fedora Linux" ] ; then
   # First, we need to install the proper python 3 Libraries
   sudo dnf install -y python3-pip python3-qt5 python3-dateutil  python3-qt5-webengine python3-setuptools
 
@@ -65,7 +65,7 @@ fi
       # Removing an uneeded package that causes formatting errors in Linux Mint
       sudo apt-get remove qt5ct ;
   fi
-  
+
 
 
 
