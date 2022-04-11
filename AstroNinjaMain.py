@@ -331,8 +331,8 @@ class App(QMainWindow):
                 os.system('chmod +x /home/$USER/Downloads/AstroNinja-Unstable/updateUnstable.sh')
                 os.system('x-terminal-emulator -e /home/$USER/Downloads/AstroNinja-Unstable/updateUnstable.sh') # will open a terminal for the user can enter their password
 
-            # Next we'll restart the app with it's changes.
-            #restart_program()
+            # Next we'll close the app.
+            sys.exit()
 
         #================================================================================================
         # Running the Scrapy spiders that retreives data for the backend modules.
