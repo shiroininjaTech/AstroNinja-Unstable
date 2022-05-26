@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 04/10/22
+   * Date Modified: 05/26/22
 """
 """
    * Changelog:
@@ -966,6 +966,7 @@ class App(QMainWindow):
                 # Found an issue where the same thing happened with .png urls.
                 # This quick if-else catches both.
                 if '.jpg' in picUrl:
+
                     head, sep, tail = picUrl.partition('.jpg')
                     picUrl = head+sep
 
@@ -1021,37 +1022,50 @@ class App(QMainWindow):
                     picUrl[2] = urllib.parse.quote(picUrl[2])
                     picUrl = urllib.parse.urlunsplit(picUrl)
 
+                    # A proper way to catch image url errors. checks for Http errors like 404
+                    try:
+                        response = urllib.request.urlopen(picUrl)
 
-                    response = urllib.request.urlopen(picUrl)
-
-                    # TO-DO: Test if this is no longer necessary if unicode characters are fixed.
-                    if '\u2014' not in xNewsV85.listedImg[d]:
-                        data = response.read()
-
-                        artmap = QPixmap()
-                        artmap.loadFromData(data)
-                        artmap = QPixmap(artmap).scaled(700, 900, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-                        self.image.setPixmap(artmap)
-                        self.image.setAlignment(QtCore.Qt.AlignCenter)
-                        self.image.adjustSize()
-                        frameLayout.addWidget(self.image, 2, 2)
-                        # Adding a space to further seperate the article image and body
+                    except urllib.error.HTTPError as e:
                         horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
                         frameLayout.addItem(horizSpacer, 1, 2)
-                        frameLayout.addItem(horizSpacer, 3, 2)
+                        frameLayout.addItem(horizSpacer, 2, 2)
 
                         # Setting the label for the date of the article.
-                        label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
-
+                        label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
 
                         # setting the label for the body of the article
-                        label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 5, 2)
+                        label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
 
-
-                        # Adding verticle spacing
-                        vert_Spacer(scroll.layout, 250, 250)
                     else:
-                        return
+                        # TO-DO: Test if this is no longer necessary if unicode characters are fixed.
+                        if '\u2014' not in xNewsV85.listedImg[d]:
+                            data = response.read()
+
+                            artmap = QPixmap()
+                            artmap.loadFromData(data)
+                            artmap = QPixmap(artmap).scaled(700, 900, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                            self.image.setPixmap(artmap)
+                            self.image.setAlignment(QtCore.Qt.AlignCenter)
+                            self.image.adjustSize()
+                            frameLayout.addWidget(self.image, 2, 2)
+                            # Adding a space to further seperate the article image and body
+                            horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                            frameLayout.addItem(horizSpacer, 1, 2)
+                            frameLayout.addItem(horizSpacer, 3, 2)
+
+                            # Setting the label for the date of the article.
+                            label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+
+                            # setting the label for the body of the article
+                            label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 5, 2)
+
+
+                            # Adding verticle spacing
+                            vert_Spacer(scroll.layout, 250, 250)
+                        else:
+                            return
 
         # Building an iterator for working through items passed by the backend module
         global countKeeper, positionKeeper

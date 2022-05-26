@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 01/19/22
+   * Date Modified: 05/25/22
 """
 
 import AstroNinjaMain
@@ -191,7 +191,7 @@ def tally_ho(x, y):
 
 
     # Haven't found fixes for these, so they're skipped for now.
-    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2022']
+    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2022', 'Summer']
 
 
     # Iterate over scheduleList until finished
