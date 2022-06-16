@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 05/26/22
+   * Date Modified: 06/16/22
 """
 """
    * Changelog:
@@ -665,10 +665,6 @@ class App(QMainWindow):
         # Building the scrollbars
         firstScroll = scrollBuilder(self.welcomeTab.layout, 1, 1)
 
-        # Creating the Welcome header using headerBuild()
-        welcome = "Welcome To AstroNinja!   "
-        headerBuild(welcome, 0, 1, self.welcomeTab.layout, 50)
-
         # Adding a verticle spacer
         vert_Spacer(scroll.layout, 250, 250)
 
@@ -680,7 +676,7 @@ class App(QMainWindow):
         scroll.layout.addItem(horizSpacer, 4, 1)
         scroll.layout.addItem(horizSpacer, 6, 1)
         # Building the frame to put the next launch icon and description
-        frameBuilder(scroll.layout, 1, 1, 750, False)
+        frameBuilder(scroll.layout, 0, 1, 750, False)
         # Running the function that uses the backend module that scrapes the data needed
         # to display the next launch. Also builds the label object
         headerBuild("Next Launch\n", 0, 1, frameLayout, 50)
