@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 05/25/22
+   * Date Modified: 06/20/22
 """
 
 import AstroNinjaMain
@@ -87,6 +87,20 @@ def tally_ho(x, y):
             dateChange = parser.parse(fixer)
             # Changing the date objects to strings because computers are stupid.
             changedateStr = str(dateChange)
+
+        elif 'Mid/Late' in launchDate :
+            later = launchDate.replace('Mid/Late ', '') # removing breaking characters
+            dateChange = parser.parse(later)
+            changedateStr = str(dateChange)
+ 
+        elif '/' and 'NET' in launchDate:
+            monthString = launchDate
+            noNet = monthString[4:]
+            noSlash = noNet[0:3]               # Removing breaking characters
+            dateChange = parser.parse(noSlash)
+            changedateStr = str(dateChange)
+ 
+
         elif '/' in launchDate:
             fixer = re.sub(r'/.*', '', launchDate)
             dateChange = parser.parse(fixer)
@@ -124,10 +138,17 @@ def tally_ho(x, y):
             changedateStr = str(dateChange)
 
 
-        elif 'Mid' in launchDate:
+        elif 'Mid' in launchDate and 'Mid-2022' not in astroNinjaV85.scheduleList[x]:
             noMids = launchDate[4:]
             dateChange = parser.parse(noMids)
             changedateStr = str(dateChange)
+        
+        elif 'Approx.' in launchDate:
+            later = launchDate.replace('Approx. ', '') # removing breaking characters
+            slicy = later[0:3]
+            dateChange = parser.parse(slicy)
+            changedateStr = str(dateChange)
+ 
 
         else:
             dateChange = parser.parse(launchDate)
@@ -197,8 +218,9 @@ def tally_ho(x, y):
     # Iterate over scheduleList until finished
     while x != 60 and y != 67:
 
-        # First we start with some conditionals that check for breaking characters in the launch month and correct them before continuing
-        if 'Approx.' in astroNinjaV85.scheduleList[x] :
+        # removing all these redundent if/else statements. Data cleansing done solely by the_cleaner() function now. After testing,
+        # remove commented out code.
+        """if 'Approx.' in astroNinjaV85.scheduleList[x] :
             later = astroNinjaV85.scheduleList[x].replace('Approx. ', '') # removing breaking characters
             slicy = later[0:3]
 
@@ -325,9 +347,9 @@ def tally_ho(x, y):
                 # increment to the next launch
                 x += 4
                 y += 4
-
+        """
         # checking for any of the vague launch dates that cause breakage.
-        elif any(word in astroNinjaV85.scheduleList[x] for word in brokenDates) :
+        if any(word in astroNinjaV85.scheduleList[x] for word in brokenDates) :
             x += 4
             y += 4
 
