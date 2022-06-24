@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 06/20/22
+   * Date Modified: 06/23/22
 """
 """
    * Changelog:
@@ -1336,7 +1336,8 @@ class App(QMainWindow):
 
             # Building the inner frame
             frameBuilder(frameLayout, 0, 0, 200, True)
-            self.frame.setMinimumHeight(500)     # setting maximum height
+            self.frame.setMinimumHeight(500)     # setting minimum height
+            self.frame.setMaximumWidth(400)
             #self.frame.setAlignment(QtCore.Qt.AlignCenter)
             # building the image object for the portrait
             self.image = QLabel(self)
@@ -1352,6 +1353,7 @@ class App(QMainWindow):
             self.image.setPixmap(artmap)
             self.image.setAlignment(QtCore.Qt.AlignCenter)
             self.image.adjustSize()
+            self.image.setMargin(0)
             frameLayout.addWidget(self.image, 1, 0)
 
             # Displaying the expidition patch with each bio
@@ -1365,8 +1367,9 @@ class App(QMainWindow):
             frameLayout.addWidget(self.expeditionLogo, 0, 1)
             # the header that contains the astronaut's name
             headerBuild(issPortal.crewName[crewVar], 0, 0, frameLayout, 70)
-            self.label.setMinimumHeight(200)
-            self.label.setMargin(0)
+            self.header.setFont(smallerHeader)
+            self.header.setMinimumHeight(50)
+            self.header.setMargin(0)
             #vert_Spacer(frameLayout, 70, 20)
             return
 
