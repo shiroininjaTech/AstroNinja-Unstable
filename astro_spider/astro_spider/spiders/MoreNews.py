@@ -146,8 +146,8 @@ class MorenewsSpider(scrapy.Spider):
 
 
         for i in bodyItems:
-            # Only newline and indent if over 25 characters
-            if len(i) > 25:
+            # Only newline and indent if over 200 characters
+            if len(i) > 200:
                 betterSpaced.append("\n\n\t" + i.replace("(opens in new tab)", ""))
             else:
                 betterSpaced.append(" " + i.replace("(opens in new tab)", ""))
