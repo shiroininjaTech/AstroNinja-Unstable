@@ -22,12 +22,26 @@ class MorenewsSpider(scrapy.Spider):
         head, sep, tail = date.partition('T')                                          # use partition() to seperate the item on the comma
         fixedDate = head                                                                # Getting the head, which is everything in front of the partition (the actual date)
 
-        # Removing the Related: inserts from the articles.
-        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]/p/text()").getall()]
 
+        bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]/p[not(.//strong)]//text()").getall()]
+
+        """
+        bountyList = ["Related:", "Read more:", "Photos:", "In photos:", "Complete coverage:", "Video:", "Additional resources:", "OFFER:" ]
+        target = any(string in bountyList for string in bodyItems)
+        while target == True:
+            print("hi")
+            for item in bodyItems:
+                if any(bountyList) in item:
+                    print("found one!")
+                    current = bodyItems.index(item) + 1        # The actual description, this is the index number
+                    bodyItems.remove(current)                  # of the related tag + 1. Must be popped first.
+                    bodyItems.remove(item)       # Then we pop the Related: tag.
+    
+        """
         """
             Iterating through body items, looking for descriptions of related articles,
             and removing them when found.
+        """
         """
         for i in bodyItems:
 
@@ -113,6 +127,7 @@ class MorenewsSpider(scrapy.Spider):
                 current = bodyItems.index(i) + 1
                 bodyItems.pop(current)
                 bodyItems.pop(bodyItems.index(i))
+        """
 
         # Getting the different types of possible images
         mainImage = "".join(response.xpath("//div[contains(@class, 'box')]//img/@src").extract())
@@ -159,11 +174,12 @@ class MorenewsSpider(scrapy.Spider):
             Attempting to scrape video objects from Space.com articles.
             Added V0.90 Beta
         """
+        """
         isVid = False
         vidScrape = response.xpath("/html/body/div[2]/article/section/div[1]/div[4]/div/div/script").extract()
         youtubeURL = response.xpath("//div//iframe//@src").extract()
         #print(vidScrape)
-
+        
         if len(vidScrape) == 0 and len(youtubeURL) == 0:
             isVid  = False
             vidUrl = "Blank"
@@ -175,7 +191,7 @@ class MorenewsSpider(scrapy.Spider):
         elif len(youtubeURL) != 0:
             isVid = True
             vidUrl = youtubeURL[0]
-
+        """
         article = {
             'title' : "".join(response.xpath("//h1//text()").extract()),
             'date'  : fixedDate,
