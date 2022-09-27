@@ -7,7 +7,7 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 09/27/21
+   * Modified: 9/26/22
 """
 import re
 from dateutil import parser
@@ -69,19 +69,9 @@ def intestellar_News(sorter):
         linkDict = dict(i)
         listedDate.append(linkDict['date'])
         listedTitle.append(linkDict['title'])                                                     # Adding the article's title
-        listedBody.append(re.sub('(:?[a-zA-Z0-9\,\:\"\'\)\*\(\-\-\]\[_])\n\n\t', r'\1 ', linkDict['body']))           # Adding the article's body/if there is a letter or number before newlines, remove them
+        listedBody.append(re.sub('(:?[a-zA-Z0-9\,\:\"\'\)\*\(\-\-\]\[_])\n\n\t', r'\1 ', linkDict['body']))           # Adding the article's body/if there is a letter or number before newlines, remove them.
         listedImg.append(linkDict['image'])
 
-
-
-        # If there is no image provided with the article, use a generic one (prevents crashes)
-        # No longer needed, found a better fix that displays articles even if there is no image.
-        """
-        if len(linkDict['image']) == 0:
-            listedImg.append('https://image.flaticon.com/icons/svg/117/117992.svg')
-        else:
-            listedImg.append(linkDict['image'])
-        """
 
     return
 

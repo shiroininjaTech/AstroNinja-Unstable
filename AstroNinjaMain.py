@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 07/15/22
+   * Date Modified: 09/26/22
 """
 """
    * Changelog:
@@ -910,10 +910,19 @@ class App(QMainWindow):
 
         self.spacexTab.layout =  QGridLayout()
 
+        self.newstabs = QTabWidget()
+        self.commercialTab = QWidget()
+        self.scienceTab = QWidget()
+        self.newstabs.addTab(self.commercialTab, "Business")
+        self.newstabs.addTab(self.scienceTab, "Science")
+        self.commercialTab.layout = QGridLayout()
+        self.scienceTab.layout = QGridLayout()
+
+        self.spacexTab.layout.addWidget(self.newstabs, 0, 0)
         newsRun = xNewsV85.intestellar_News(sortingSelected)
 
         # Building the scroll bar for the schedule. scrollBuilder() added V.75
-        scrollBuilder(self.spacexTab.layout, 0, 0)
+        scrollBuilder(self.commercialTab.layout, 0, 0)
 
         # An function based on launch_scheduleBuild that builds out the list of articles in the GUI
         # a is the position of the item in titleList
@@ -959,26 +968,6 @@ class App(QMainWindow):
                 # Fixed in 0.90 Alpha, removed extra image url if there is one.
                 picUrl = xNewsV85.listedImg[d]
 
-                # Found an issue where the same thing happened with .png urls.
-                # This quick if-else catches both.
-                if '.jpg' in picUrl:
-
-                    head, sep, tail = picUrl.partition('.jpg')
-                    picUrl = head+sep
-
-                elif '.png' in picUrl:
-                    head, sep, tail = picUrl.partition('.png')
-                    picUrl = head+sep
-
-                elif '.jpeg' in picUrl:
-                    head, sep, tail = picUrl.partition('.jpeg')
-                    picUrl = head+sep
-
-                elif '.gif' in picUrl:
-                    head, sep, tail = picUrl.partition('.gif')
-                    picUrl = head+sep
-
-
                 picUrl = list(urllib.parse.urlsplit(picUrl))
                 picUrl[2] = urllib.parse.quote(picUrl[2])
                 picUrl = urllib.parse.urlunsplit(picUrl)
@@ -997,6 +986,19 @@ class App(QMainWindow):
 
                     # setting the label for the body of the article
                     label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+                except AttributeError as e:
+                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                    frameLayout.addItem(horizSpacer, 1, 2)
+                    frameLayout.addItem(horizSpacer, 2, 2)
+
+                    # Setting the label for the date of the article.
+                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
+
+                    # setting the label for the body of the article
+                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+ 
 
                 except ValueError as e:
                     horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
@@ -1064,6 +1066,8 @@ class App(QMainWindow):
             iterator(countKeeper, positionKeeper)
 
         self.spacexTab.setLayout(self.spacexTab.layout)
+        self.commercialTab.setLayout(self.commercialTab.layout)
+        self.scienceTab.setLayout(self.scienceTab.layout)
 
         #======================================================================================
         # The Hubble Views tab, which shows the shot of the weeks from the Hubble
