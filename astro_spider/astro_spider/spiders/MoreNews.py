@@ -18,141 +18,47 @@ class MorenewsSpider(scrapy.Spider):
 
         # Fixing the found items in the xpath of the photo's metadata.
         # This ensures we only get the date of the image so they can be sorted.
-        date =  "".join(response.xpath("//p[contains(@class, 'byline')]//time//text()").extract())                 # Just get the first item found, which will be the date.
+        date =  "".join(response.xpath("//div[contains(@class, 'byline')]//time//text()").extract())                 # Just get the first item found, which will be the date.
         head, sep, tail = date.partition('T')                                          # use partition() to seperate the item on the comma
         fixedDate = head                                                                # Getting the head, which is everything in front of the partition (the actual date)
 
 
         bodyItems = [i.strip() for i in response.xpath("//div[contains(@class, 'text-copy bodyCopy auto')]/p[not(.//strong)]//text()").getall()]
-
-        """
-        bountyList = ["Related:", "Read more:", "Photos:", "In photos:", "Complete coverage:", "Video:", "Additional resources:", "OFFER:" ]
-        target = any(string in bountyList for string in bodyItems)
-        while target == True:
-            print("hi")
-            for item in bodyItems:
-                if any(bountyList) in item:
-                    print("found one!")
-                    current = bodyItems.index(item) + 1        # The actual description, this is the index number
-                    bodyItems.remove(current)                  # of the related tag + 1. Must be popped first.
-                    bodyItems.remove(item)       # Then we pop the Related: tag.
-    
-        """
-        """
-            Iterating through body items, looking for descriptions of related articles,
-            and removing them when found.
-        """
-        """
-        for i in bodyItems:
-
-            if "Related:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
-
-            elif "Read more:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
-
-            elif "Photos:" in i:
-                current = bodyItems.index(i) + 1
-                bodyItems.pop(current)
-                bodyItems.pop(bodyItems.index(i))
-
-            elif "In photos:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
-
-            elif "Complete coverage:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
-
-
-            elif "Video:" in i:
-                current = bodyItems.index(i) + 1
-                bodyItems.pop(current)
-                bodyItems.pop(bodyItems.index(i))
-
-            elif "Additional resources:" in i:
-                current = bodyItems.index(i) + 1
-                bodyItems.pop(current)
-                bodyItems.pop(bodyItems.index(i))
-
-            elif "OFFER:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                current2 = current + 1
-                current3 = current2 + 1
-                current4 = current3 + 1
-                bodyItems.pop(current4)
-                bodyItems.pop(current3)
-                bodyItems.pop(current2)
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))       # Then we pop the Related: tag.
-
-            elif "Space.com Collection:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                current2 = current + 1
-                current3 = current2 + 1
-
-                bodyItems.pop(current3)
-                bodyItems.pop(current2)
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))
-
-            elif "Book of Mars:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                current2 = current + 1
-                current3 = current2 + 1
-
-                bodyItems.pop(current3)
-                bodyItems.pop(current2)
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))
-
-        for i in bodyItems:
-            if "Incredible Earth:" in i:
-                current = bodyItems.index(i) + 1        # The actual description, this is the index number
-                current2 = current + 1
-                current3 = current2 + 1
-
-                bodyItems.pop(current3)
-                bodyItems.pop(current2)
-                bodyItems.pop(current)                  # of the related tag + 1. Must be popped first.
-                bodyItems.pop(bodyItems.index(i))
-
-            elif "Watch:" in i:
-                current = bodyItems.index(i) + 1
-                bodyItems.pop(current)
-                bodyItems.pop(bodyItems.index(i))
-        """
-
+        
         # Getting the different types of possible images
         mainImage = "".join(response.xpath("//div[contains(@class, 'box')]//img/@src").extract())
         altImage  = response.xpath("//img[contains(@class, 'expandable lazy-image-van')]/@data-srcset").get()
+        thirdImage  = response.xpath("//img[contains(@class, 'block-image-ads hero-image')]//@src").get()
 
-
+        #print(mainImage)
         # If the page doen't have one format of an image, try the other format.
         if mainImage == "/media/img/missing-image.svg":
             imageUsed = altImage
+
+   
+        elif mainImage is None or altImage is None and thirdImage is not None:
+            imageUsed = thirdImage
+
+            
         else:
             imageUsed = mainImage
 
+
         # trimming the found urls down to a single URL.
-        if '.jpg' in imageUsed:
+        if '.jpg' in str(imageUsed):
             head, sep, tail = imageUsed.partition('.jpg')                                          # use partition() to seperate the item on the comma
             fixedImg = head+sep
 
-        elif '.jpeg' in imageUsed:
+        elif '.jpeg' in str(imageUsed):
             head, sep, tail = imageUsed.partition('.jpeg')                                          # use partition() to seperate the item on the comma
             fixedImg = head+sep
 
-        elif '.png' in imageUsed:
+        elif '.png' in str(imageUsed):
             head, sep, tail = imageUsed.partition('.png')                                          # use partition() to seperate the item on the comma
             fixedImg = head+sep
-
+        
+        else:
+            fixedImg = imageUsed
 
 
         # Fixing the spacing of the items, so smaller items don't get indented.
@@ -201,7 +107,5 @@ class MorenewsSpider(scrapy.Spider):
         }
 
 
-
-
         yield article
-#/html/body/div[2]/article/section/div[1]/div[1]/iframe
+
