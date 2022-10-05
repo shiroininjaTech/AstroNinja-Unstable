@@ -6,7 +6,7 @@ class CrewspiderSpider(scrapy.Spider):
 
     name = 'crew_spider'
     allowed_domains = ['wikipedia.org']
-    start_urls = ['https://en.wikipedia.org/wiki/Expedition_67']
+    start_urls = ['https://en.wikipedia.org/wiki/Expedition_68']
     custom_settings = {'LOG_ENABLED': True,
     }
 
