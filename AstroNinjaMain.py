@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 09/26/22
+   * Date Modified: 10/05/22
 """
 """
    * Changelog:
@@ -1276,7 +1276,7 @@ class App(QMainWindow):
         frameBuilder(scroll.layout, 2, 1, 750, False )
         self.frame.setMaximumHeight(300)
         # the header
-        crewHead = "Current Expedition Crew                                                         Expedition 67"
+        crewHead = "Current Expedition Crew                                                         Expedition 68"
         #self.resLabel = QLabel("Current ISS Residents\n\nExpedition 62", self)
         headerBuild(crewHead, 1, 1, frameLayout, 70)
 
