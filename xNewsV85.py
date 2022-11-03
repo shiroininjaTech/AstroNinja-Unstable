@@ -7,7 +7,7 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 9/26/22
+   * Modified: 11/02/22
 """
 import re
 from dateutil import parser
@@ -17,9 +17,12 @@ from dateutil import parser
     Creating pipeline classes that collects dictionary objects passed by
     scrapy into a single list for easier processing.
 """
-global spiderLoot
+global spiderLoot, hubbleData, spaceCom
 spiderLoot = []    # list to be filled with scrapy objects
+hubbleData = []    # List for hubble views.
+spaceCom = []      # List for space.com articles.
 
+# This is the pipline for news_spider.
 class ItemCollectorPipeline(object):
     def __init__(self):
         self.ids_seen = set()
@@ -27,9 +30,14 @@ class ItemCollectorPipeline(object):
     def process_item(self, item, spider):
         spiderLoot.append(item)
 
-# For hubble views
-global hubbleData
-hubbleData = []
+# This is the pipeline for MoreNews.
+class SpaceComPipeline(object):
+    def __init__(self):
+        self.ids_seen = set()
+
+    def process_item(self, item, spider):
+        spaceCom.append(item)    
+
 
 # pipeline to fill the items list
 class HubbleCollectorPipeline(object):
@@ -43,18 +51,18 @@ class HubbleCollectorPipeline(object):
 
 # A function that runs the news_spider and processes the scraped data
 # for use by the front end module.
-def intestellar_News(sorter):
+def intestellar_News(sorter, dumpList):
 
     # a fix for missing dates. temporary.
-    for i in spiderLoot:
+    for i in dumpList:
         if i['date'] == '':
             i['date'] = '2020-01-01'
 
     # sorting the list of dictionaries passed by scrapy by date.
     if sorter == 'Newest':
-        sortedResults = sorted(spiderLoot, key = lambda i: parser.parse(i['date']), reverse=True)
+        sortedResults = sorted(dumpList, key = lambda i: parser.parse(i['date']), reverse=True)
     if sorter == "Oldest":
-        sortedResults = sorted(spiderLoot, key = lambda i: parser.parse(i['date']), reverse=False)
+        sortedResults = sorted(dumpList, key = lambda i: parser.parse(i['date']), reverse=False)
 
     # Creating some empty lists to dump the contents of each dictionary into.
     global listedTitle, listedBody, listedImg, listedDate
