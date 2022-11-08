@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/03/22
+   * Date Modified: 11/08/22
 """
 """
    * Changelog:
@@ -253,7 +253,7 @@ class App(QMainWindow):
 
             # Adding a section in the config.ini for storing update options.
             themeConfig.add_section('Updates')
-            themeConfig.set('Updates', 'key1', 'Unstable')
+            themeConfig.set('Updates', 'key1', 'Stable')
             versionSelected = themeConfig.get('Updates', 'key1')
 
             with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
@@ -698,7 +698,7 @@ class App(QMainWindow):
         spaceXlaunch.liftOff()
         # Building the SpaceX Lens object
 
-        itemPosition = 3
+        itemPosition = 2
 
         if spaceXlaunch.onlyLink != "" :
 
@@ -1297,7 +1297,7 @@ class App(QMainWindow):
         frameBuilder(scroll.layout, 2, 1, 750, False )
         self.frame.setMaximumHeight(300)
         # the header
-        crewHead = "Current Expedition Crew                                                         Expedition 68"
+        crewHead = "Current Expedition Crew"
         #self.resLabel = QLabel("Current ISS Residents\n\nExpedition 62", self)
         headerBuild(crewHead, 1, 1, frameLayout, 70)
 
