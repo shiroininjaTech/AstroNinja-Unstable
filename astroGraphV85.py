@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 06/20/22
+   * Date Modified: 12/28/22
 """
 
 import AstroNinjaMain
@@ -19,8 +19,8 @@ from dateutil import parser
 from datetime import date
 import re
 
-#missionCount = 3
 my_date = date.today()
+
 
 """
     Creating a pipeline class for scrapy to funnel results into.
@@ -138,7 +138,7 @@ def tally_ho(x, y):
             changedateStr = str(dateChange)
 
 
-        elif 'Mid' in launchDate and 'Mid-2022' not in astroNinjaV85.scheduleList[x]:
+        elif 'Mid' in launchDate and 'Mid-2023' not in astroNinjaV85.scheduleList[x]:
             noMids = launchDate[4:]
             dateChange = parser.parse(noMids)
             changedateStr = str(dateChange)
@@ -212,142 +212,12 @@ def tally_ho(x, y):
 
 
     # Haven't found fixes for these, so they're skipped for now.
-    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2022', 'Summer']
+    brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2023', 'Summer']
 
 
     # Iterate over scheduleList until finished
     while x != 60 and y != 67:
 
-        # removing all these redundent if/else statements. Data cleansing done solely by the_cleaner() function now. After testing,
-        # remove commented out code.
-        """if 'Approx.' in astroNinjaV85.scheduleList[x] :
-            later = astroNinjaV85.scheduleList[x].replace('Approx. ', '') # removing breaking characters
-            slicy = later[0:3]
-
-            the_cleaner(slicy, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-
-        elif 'Mid-' in astroNinjaV85.scheduleList[x] and 'Mid-2022' not in astroNinjaV85.scheduleList[x]:
-            later = astroNinjaV85.scheduleList[x].replace('Mid-', '') # removing breaking characters
-            slicy = later[0:3]
-
-            the_cleaner(slicy, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-
-        elif 'Late' in str(astroNinjaV85.scheduleList[x]):
-            later = astroNinjaV85.scheduleList[x].replace('Late ', '') # removing breaking characters
-
-            the_cleaner(later, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-        elif 'Mid/Late' in astroNinjaV85.scheduleList[x] :
-            later = astroNinjaV85.scheduleList[x].replace('Mid/Late ', '') # removing breaking characters
-
-            the_cleaner(later, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-        elif '/' and 'NET' in astroNinjaV85.scheduleList[x]:
-            monthString = astroNinjaV85.scheduleList[x]
-            noNet = monthString[4:]
-            noSlash = noNet[0:3]               # Removing breaking characters
-
-            the_cleaner(noSlash, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-        elif '/' in astroNinjaV85.scheduleList[x]:
-            monthString = astroNinjaV85.scheduleList[x]
-            noSlash = re.sub('/.*', '', monthString)
-
-            the_cleaner(noSlash, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-
-
-        elif 'NET' in astroNinjaV85.scheduleList[x]:
-            netMonth = astroNinjaV85.scheduleList[x]
-            noNet = netMonth[4:]      # cutting out characters that cause a crash and miscount.
-
-            the_cleaner(noNet, my_date)
-
-            if todaySlice != changedSlice2 and changedSlice <= todaydateStr:
-                x += 4
-                y += 4
-            # countDracula checks which agency the launch is with and increments
-            # the correct variable
-            else:
-                countDracula(changedSlice2)
-
-                # increment to the next launch
-                x += 4
-                y += 4
-        """
         # checking for any of the vague launch dates that cause breakage.
         if any(word in astroNinjaV85.scheduleList[x] for word in brokenDates) :
             x += 4
@@ -421,7 +291,6 @@ def historian(year):
     sortedXpace = datlistFix('expace')
     sortedChina = sortedChina + sortedXpace
     sortedChina = list(dict.fromkeys(sortedChina))
-    #print(sortedSpacex)
     #print(sortedChina)
     # The global variables to be passed to the front end to build graphs
     # TO-DO: put them in a dictionary

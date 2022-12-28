@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/08/22
+   * Date Modified: 12/28/22
 """
 """
    * Changelog:
@@ -784,8 +784,18 @@ class App(QMainWindow):
         # added in Version 0.80
         #=============================================================================================================================
 
+
+        """  
+            After so many years, I finally created a sane way of changing years to tally
+            without doing it manually. 
+        """
+        my_date = date.today()
+
+        currentYear  = str(my_date.year)
+        previousYear = str(my_date.year-1)    # The current year minus one.
+
         # Running function that scrapes launch history in the backend module
-        astroGraphV85.historian('2022')
+        astroGraphV85.historian(currentYear)
 
         # The tallies
         historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
