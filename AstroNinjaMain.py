@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 12/28/22
+   * Date Modified: 12/30/22
 """
 """
    * Changelog:
@@ -803,7 +803,10 @@ class App(QMainWindow):
         # The Organizations
         orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin', 'Virgin\nOrbit')
 
-        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2022 by Organization\n', orgs, scroll.layout, itemPosition, 1)
+        # Making year progression automatic.
+        titleStr = 'Total Launches For %s by Organization\n' % currentYear
+
+        graph_maker(historyTallies, 'Launch Totals', titleStr, orgs, scroll.layout, itemPosition, 1)
         itemPosition += 1
         #=================================================================================================
         # Creating the third graph, which shows  the total launches for the previous year
@@ -816,7 +819,9 @@ class App(QMainWindow):
         # The tallies
         historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
 
-        graph_maker(historyTallies, 'Launch Totals', 'Total Launches For 2021 by Organization\n', orgs, scroll.layout, itemPosition, 1)
+        titleStr = 'Total Launches For %s by Organization\n' % previousYear
+
+        graph_maker(historyTallies, 'Launch Totals', titleStr, orgs, scroll.layout, itemPosition, 1)
 
         self.welcomeTab.setLayout(self.welcomeTab.layout)
         #=================================================================================================
