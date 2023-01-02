@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 12/30/22
+   * Date Modified: 1/02/22
 """
 """
    * Changelog:
@@ -814,7 +814,7 @@ class App(QMainWindow):
         #=================================================================================================
 
         # Running function that scrapes launch history in the backend module
-        astroGraphV85.historian('2021')
+        astroGraphV85.historian(previousYear)
 
         # The tallies
         historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
