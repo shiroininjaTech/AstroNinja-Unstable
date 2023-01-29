@@ -78,7 +78,6 @@ def tally_ho(x, y):
         global changedSlice, changedSlice2, todaySlice, todaydateStr
 
         # converting the launch date so that it can be compared to the current month.
-        print(launchDate)
         if 'NET' in launchDate and '/' in launchDate:
             noNet = launchDate[4:]
 
