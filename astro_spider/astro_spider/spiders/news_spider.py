@@ -79,13 +79,12 @@ class NewsSpiderSpider(scrapy.Spider):
             else:
                 bodyList.append("\n\n\t" + i)
 
-        print(bodyList)
 
         article = {
             'title' : response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()[0],
             'date'  : response.xpath("//time[contains(@class, 'entry-date published')]/text()").extract()[-1],
             'body'  : " ".join(bodyList),
-            'image'   : "".join(response.xpath("//figure[contains(@class, 'featured wp-caption')]//img/@src").extract())
+            'image'   : "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
 
         }
 
