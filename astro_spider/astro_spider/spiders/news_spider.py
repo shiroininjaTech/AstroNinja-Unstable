@@ -5,7 +5,7 @@ import sqlite3, os
 class NewsSpiderSpider(scrapy.Spider):
     name = 'news_spider'
     allowed_domains = ['spacenews.com']
-    start_urls = ['http://spacenews.com/commercial/', 'http://spacenews.com/launch/', 'https://spacenews.com/civil/']
+    start_urls = ['http://spacenews.com/section/commercial/', 'http://spacenews.com/section/launch/', 'https://spacenews.com/section/civil/']
     custom_settings = {'LOG_ENABLED': True,
     }
 
@@ -80,11 +80,31 @@ class NewsSpiderSpider(scrapy.Spider):
                 bodyList.append("\n\n\t" + i)
 
 
+        imgTag = "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
+
+        # trimming the found urls down to a single URL.
+        if '.jpg' in imgTag:
+            head, sep, tail = imgTag.partition('.jpg?')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep[:-1]
+
+        elif '.jpeg' in imgTag:
+            head, sep, tail = imgTag.partition('.jpeg?')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep[:-1]
+
+        elif '.png' in imgTag:
+            head, sep, tail = imgTag.partition('.png?')                                          # use partition() to seperate the item on the comma
+            fixedImg = head+sep[:-1]
+        
+        else:
+            fixedImg = imgTag
+    
+        print(fixedImg)
+
         article = {
             'title' : response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()[0],
             'date'  : response.xpath("//time[contains(@class, 'entry-date published')]/text()").extract()[-1],
             'body'  : " ".join(bodyList),
-            'image'   : "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
+            'image'   : fixedImg
 
         }
 
