@@ -80,24 +80,25 @@ class NewsSpiderSpider(scrapy.Spider):
                 bodyList.append("\n\n\t" + i)
 
 
-        imgTag = "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
+        imgTag = "".join(response.xpath("///main/div/figure/img/@src").extract())
 
         # trimming the found urls down to a single URL.
         if '.jpg' in imgTag:
             head, sep, tail = imgTag.partition('.jpg?')                                          # use partition() to seperate the item on the comma
-            fixedImg = head+sep[:-1]
-
+            fixedImg = head.replace("https://i0.wp.com/", 'https://')+sep[:-1]
+            
         elif '.jpeg' in imgTag:
             head, sep, tail = imgTag.partition('.jpeg?')                                          # use partition() to seperate the item on the comma
-            fixedImg = head+sep[:-1]
+            fixedImg = head.replace("https://i0.wp.com/", 'https://')+sep[:-1]
+            
 
         elif '.png' in imgTag:
             head, sep, tail = imgTag.partition('.png?')                                          # use partition() to seperate the item on the comma
-            fixedImg = head+sep[:-1]
-        
+            fixedImg = head.replace("https://i0.wp.com/", 'https://')+sep[:-1]
+            
         else:
             fixedImg = imgTag
-    
+               
         print(fixedImg)
 
         article = {
@@ -108,6 +109,6 @@ class NewsSpiderSpider(scrapy.Spider):
 
         }
 
-
+        #/html/body/div/div[2]/section/main/div/figure/img
         #concatenate_list(article['body'])
         yield article
