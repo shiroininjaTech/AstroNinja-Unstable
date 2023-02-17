@@ -98,17 +98,14 @@ class NewsSpiderSpider(scrapy.Spider):
             
         else:
             fixedImg = imgTag
-               
-        print(fixedImg)
+
 
         article = {
-            'title' : response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()[0],
+            'title' : "".join(response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()).strip(),
             'date'  : response.xpath("//time[contains(@class, 'entry-date published')]/text()").extract()[-1],
             'body'  : " ".join(bodyList),
             'image'   : fixedImg
 
         }
 
-        #/html/body/div/div[2]/section/main/div/figure/img
-        #concatenate_list(article['body'])
         yield article
