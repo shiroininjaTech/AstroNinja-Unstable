@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 1/29/23
+   * Date Modified: 3/28/23
 """
 
 import AstroNinjaMain
@@ -78,6 +78,7 @@ def tally_ho(x, y):
         global changedSlice, changedSlice2, todaySlice, todaydateStr
 
         # converting the launch date so that it can be compared to the current month.
+    
         if 'NET' in launchDate and '/' in launchDate:
             noNet = launchDate[4:]
 
@@ -96,7 +97,7 @@ def tally_ho(x, y):
             noNet = launchDate[4:]
 
             if 'Late' in noNet:
-                noNet = noNet[5:]
+                noNet = noNet[6:]
 
             dateChange = parser.parse(noNet)
             changedateStr = str(dateChange)
