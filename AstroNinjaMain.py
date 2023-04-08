@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 1/02/22
+   * Date Modified: 4/08/23
 """
 """
    * Changelog:
@@ -1193,8 +1193,9 @@ class App(QMainWindow):
         scrollBuilder(self.issTab.layout, 0, 0)
 
         self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
-        self.issView.setUrl(QUrl("https://www.ustream.tv/embed/17074538?html5ui"))         # setting the URL to the one scraped by testFlight()
+        self.issView.setUrl(QUrl("https://www.youtube.com/embed/itdpuGHAcpg"))         # setting the URL to the one scraped by testFlight()
         self.issView.setMinimumWidth(900)
+        self.issView.setMaximumHeight(700)
         # Building the SpaceX Lens object
         frameBuilder(scroll.layout, 0, 1, 750, False)
         vert_Spacer(scroll.layout, 150, 50)
