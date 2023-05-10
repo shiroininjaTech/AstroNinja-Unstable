@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 09/24/2020
-# Modified: 06/22/2022
+# Modified: 05/10/2023
 
 # Getting which distro the user is running
 if [ -f /etc/os-release ]; then
@@ -29,10 +29,10 @@ if [ "$OS" = "Fedora" ] ; then
 
 else
   # First, we need to install the proper python 3 Libraries
-  sudo apt-get install -y python3-pip python3-pyqt5 python3-dateutil python3-pyqt5.qtwebengine python3-setuptools
+  sudo apt-get install -y python3-pip python3-pyqt5 python3-dateutil python3-pyqt5.qtwebengine python3-setuptools python3-matplotlib python3-lxml python3-scrapy
 
   # Next we install the libaries installed by pip
-  python3 -m pip install matplotlib lxml scrapy
+  #python3 -m pip install matplotlib lxml scrapy
 
   # removes the folder, then copies the files to a . folder.
   rm -rf /home/$USER/.AstroNinja

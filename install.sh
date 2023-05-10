@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 10/01/2018
-# Modified: 05/05/2023
+# Modified: 05/10/2023
 
 
 # Testing for addition of an option to install on Fedora
@@ -42,7 +42,7 @@ else
   sudo apt-get install -y python3-pip python3-pyqt5 python3-dateutil python3-pyqt5.qtwebengine python3-setuptools python3-matplotlib python3-lxml python3-scrapy
 
   # Next we install the libaries installed by pip
-  # Commenting out because python packages are installed differently in Ubuntu 23.04
+  # Commenting out because Ubuntu 23.04 changes the way python packages have to be installed.
   #python3 -m pip install matplotlib lxml scrapy
 
   # removes the folder, then copies the files to a . folder.
