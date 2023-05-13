@@ -25,7 +25,7 @@ class YoutuberSpider(scrapy.Spider):
 
         videos = {
             'link' : response.xpath('//div[contains(@class, "columns large-7 medium-7")]//@src').extract()[0],
-            'mission' : response.xpath('//div[contains(@class, "row header")]//text()').extract()[0]
+            'mission' : response.xpath('//div[contains(@class, "row header")]//text()').extract()[1]
 
         }
 
