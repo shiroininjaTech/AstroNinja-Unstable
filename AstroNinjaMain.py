@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 5/10/23
+   * Date Modified: 5/13/23
 """
 """
    * Changelog:
@@ -681,7 +681,7 @@ class App(QMainWindow):
         frameBuilder(scroll.layout, 0, 1, 750, False)
         # Running the function that uses the backend module that scrapes the data needed
         # to display the next launch. Also builds the label object
-        headerBuild("Next Launch\n", 0, 1, frameLayout, 50)
+        headerBuild("Next Launch", 0, 1, frameLayout, 60)
         self.header.setAlignment(QtCore.Qt.AlignLeft)
 
         get_recent()
