@@ -134,7 +134,7 @@ def tally_ho(x, y):
 
 
         elif 'Late' in launchDate:
-            notLate = launchDate[5:]
+            notLate = launchDate[6:]
             dateChange = parser.parse(notLate)
             changedateStr = str(dateChange)
 
