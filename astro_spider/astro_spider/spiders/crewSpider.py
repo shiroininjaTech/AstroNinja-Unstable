@@ -6,13 +6,14 @@ class CrewspiderSpider(scrapy.Spider):
 
     name = 'crew_spider'
     allowed_domains = ['wikipedia.org']
-    start_urls = ['https://en.wikipedia.org/wiki/Expedition_68']
+    start_urls = ['https://en.wikipedia.org/wiki/Expedition_69']
     custom_settings = {'LOG_ENABLED': True,
     }
 
     def parse(self, response):
         for bio_url in response.xpath("//table[contains(@class, 'infobox')]//div[contains(@class, 'plainlist')]//a/@href").extract():
-            yield response.follow(bio_url, callback=self.parse_bio)
+            if "#cite_note-3" not in bio_url:
+                yield response.follow(bio_url, callback=self.parse_bio)
 
 
     def parse_bio(self, response):
@@ -53,7 +54,7 @@ class CrewspiderSpider(scrapy.Spider):
             'short2'  : secondHalf,
             'birthplace'  : "".join(response.xpath("//table[contains(@class, 'infobox biography vcard')]//div[contains(@class, 'birthplace')]//text()").extract()),
             'nationality'   : "".join(response.xpath("//table[contains(@class, 'infobox biography vcard')]//tr/td[contains(@class, 'category')]/text()").extract()),
-            'photo'       : "".join(response.xpath("//table[contains(@class, 'infobox biography vcard')]//td[contains(@colspan, '2')]//a[contains(@class, 'image')]//img/@src").extract())
+            'photo'       : "".join(response.xpath("//table[contains(@class, 'infobox biography vcard')]//td[contains(@class, 'infobox-image')]//a[contains(@class, 'mw-file-description')]//img/@src").extract())
 
         }
 
