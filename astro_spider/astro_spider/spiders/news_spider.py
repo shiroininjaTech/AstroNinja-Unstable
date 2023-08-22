@@ -80,7 +80,7 @@ class NewsSpiderSpider(scrapy.Spider):
                 bodyList.append("\n\n\t" + i)
 
 
-        imgTag = "".join(response.xpath("///main/div/figure/img/@src").extract())
+        imgTag = "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
 
         # trimming the found urls down to a single URL.
         if '.jpg' in imgTag:
@@ -99,6 +99,7 @@ class NewsSpiderSpider(scrapy.Spider):
         else:
             fixedImg = imgTag
 
+        print(fixedImg)
 
         article = {
             'title' : "".join(response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()).strip(),
