@@ -99,7 +99,7 @@ class NewsSpiderSpider(scrapy.Spider):
         else:
             fixedImg = imgTag
 
-        print(fixedImg)
+    
 
         article = {
             'title' : "".join(response.xpath("//h1[contains(@class, 'entry-title')]//text()").extract()).strip(),
