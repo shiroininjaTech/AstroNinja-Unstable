@@ -6,8 +6,10 @@
 """
    * Written By : Tom Mullins
    * Created:  07/24/20
-   * Modified: 05/22/21
+   * Modified: 10/08/23
 """
+
+from youtubesearchpython import VideosSearch
 
 global spacexDump
 spacexDump = []
@@ -31,7 +33,7 @@ def liftOff():
 
     for i in spacexDump:
         spacexDict = dict(i)
-        link.append(spacexDict['link'])
+        link.append(spacexDict['youtubeUrl'])
         missionTitle.append(spacexDict['mission'])
 
     # Catching if there is no launch video available.
@@ -39,9 +41,21 @@ def liftOff():
         onlyLink = ""
 
     else:
+
+        
         # Getting the first link and mission title in the schedule.
         onlyLink = link[0]
         onlyTitle = missionTitle[0]
 
 
+    # getting the launch url using a youtube searching library, and then parsing the results to the first video result's link.
+    launchSearch = VideosSearch(missionTitle[0], limit = 1)
+    resultDict = launchSearch.result()['result'][0]  # Getting the first dictionary from the main dictionary.
+    result2  = (resultDict['link']).replace("watch?v=", 'embed/')+ '?si=XPF4U5XII6S2xNTz' # Turning the video link into an embed link.
+
+    onlyLink = result2
+
+
+
     return
+

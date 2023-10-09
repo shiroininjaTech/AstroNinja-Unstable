@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 6/12/23
+   * Date Modified: 10/4/23
 """
 """
    * Changelog:
@@ -951,8 +951,8 @@ class App(QMainWindow):
         def newsListBuilder(a, b, c, d, e):
 
             # Removing unwanted articles from space.com
-            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday', 'deals and gifts', 'Best Drone Deals:', 'Best Cameras']                        # The list of articles to look for
-            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a] or naughtyArticles[5] in xNewsV85.listedTitle[a] or naughtyArticles[6] in xNewsV85.listedTitle[a] or naughtyArticles[7] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
+            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday', 'deals and gifts', 'Best Drone Deals:', 'Best Cameras', 'What is the moon phase today?']                        # The list of articles to look for
+            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a] or naughtyArticles[5] in xNewsV85.listedTitle[a] or naughtyArticles[6] in xNewsV85.listedTitle[a] or naughtyArticles[7] in xNewsV85.listedTitle[a] or naughtyArticles[8] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
                 # Ends and moves on to the next article if found.
                 return
 
@@ -1195,7 +1195,7 @@ class App(QMainWindow):
         scrollBuilder(self.issTab.layout, 0, 0)
 
         self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
-        self.issView.setUrl(QUrl("https://www.youtube.com/embed/KG6SL6Mf7ak"))         # setting the URL to the one scraped by testFlight()
+        self.issView.setUrl(QUrl("https://www.youtube.com/embed/K5JSRGhB-nM?si=XPF4U5XII6S2xNTz"))         # setting the URL to the one scraped by testFlight()
         self.issView.setMinimumWidth(900)
         self.issView.setMaximumHeight(700)
         # Building the SpaceX Lens object
