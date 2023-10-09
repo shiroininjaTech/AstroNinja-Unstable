@@ -4,9 +4,11 @@ import scrapy
 
 class YoutuberSpider(scrapy.Spider):
     name = 'youtuber'
-    allowed_domains = ['rocketlaunch.live']
+    allowed_domains = ['rocketlaunch.live', 'youtube.com']
     start_urls = ['https://www.rocketlaunch.live/?pastOnly=1&page=1']
-
+    custom_settings = {'LOG_ENABLED': True,
+    }
+    
     def parse(self, response):
         """
             Switched from getting launch videos from SpaceX's website, to getting it from the same source as the
@@ -23,10 +25,17 @@ class YoutuberSpider(scrapy.Spider):
 
     def parse_launch(self, response):
 
-        videos = {
-            'link' : response.xpath('//div[contains(@class, "columns large-7 medium-7")]//@src').extract()[0],
-            'mission' : response.xpath('//div[contains(@class, "row header")]//text()').extract()[1]
+        missionName = response.xpath('//div[contains(@class, "row header")]//text()').extract()[1]
+        youtubeSearch = ("https://www.youtube.com/results?search_query=%s" % missionName).replace(" ", "+")  # Combines the youtube search URL and the first mission name.
 
+        
+        videos = {
+            'youtubeUrl': youtubeSearch,
+            'mission' : missionName,
         }
 
+        
         yield videos
+
+
+
