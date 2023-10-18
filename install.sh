@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 10/01/2018
-# Modified: 10/08/2023
+# Modified: 10/18/2023
 
 
 # Testing for addition of an option to install on Fedora
@@ -49,7 +49,7 @@ else
   #installing the new library that is used in the newly implimented launch video fix. 
   # We have to install it via pip because it's a bit old and not in the Ubuntu repos.
   # I aplogize for having to do it this way.
-  pip3 install youtube-search-python --break-system-packages -y
+  pip3 install youtube-search-python --break-system-packages 
 
   # removes the folder, then copies the files to a . folder.
   rm -rf /home/$USER/.AstroNinja
