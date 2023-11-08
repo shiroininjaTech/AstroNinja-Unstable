@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 10/01/2018
-# Modified: 10/18/2023
+# Modified: 11/07/2023
 
 
 # Testing for addition of an option to install on Fedora
