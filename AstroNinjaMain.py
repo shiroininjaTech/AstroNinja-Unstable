@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 12/6/23
+   * Date Modified: 01/01/24
 """
 """
    * Changelog:
@@ -73,6 +73,7 @@ import numpy as np
 from configparser import ConfigParser
 import astroThemesV85
 import urllib.request, urllib.parse
+from urllib.request import Request, urlopen
 import astroNinjaV85
 from PyQt5 import QtWebEngineWidgets
 #from PyQt5 import QtWebEngineCore
@@ -1132,35 +1133,69 @@ class App(QMainWindow):
             # setting the label for the title of the article
 
             self.image= QLabel(self)
-            data = urllib.request.urlopen(xNewsV85.images[d]).read()
-            artmap = QPixmap()
-            artmap.loadFromData(data)
-            self.image.setPixmap(artmap)
-            self.image.setAlignment(QtCore.Qt.AlignCenter)
-            self.image.adjustSize()
-            frameLayout.addWidget(self.image, 1, 1)
-            # Adding a space to further seperate the article image and body
-            horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-            frameLayout.addItem(horizSpacer, 0, 2)
-            frameLayout.addItem(horizSpacer, 3, 2)
+            print(xNewsV85.images[d])
 
-            #vert_Spacer(frameLayout, 100, 100)
-            # setting the label for the body of the article
-            frameBuilder(frameLayout, 1, 3, 600, True)
+            req = Request(xNewsV85.images[d], headers={'User-Agent': 'Mozilla/5.0'})
 
-            # Building the header
-            headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
+            
 
-            """
-                Use a smaller font for the mission title if it's
-                longer than 25 char. This prevents cutting off of
-                parts of the header.
-            """
-            if len(xNewsV85.headers[b]) >= 25:
-                self.header.setFont(smallerHeader)
+            # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
+            try:
+                data = urlopen(req).read()
 
-            # Generating the Description label.
-            label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
+            except urllib.error.HTTPError as e:
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 0, 2)
+                frameLayout.addItem(horizSpacer, 3, 2)
+
+                #vert_Spacer(frameLayout, 100, 100)
+                # setting the label for the body of the article
+                frameBuilder(frameLayout, 1, 3, 600, True)
+
+                # Building the header
+                headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
+
+                """
+                    Use a smaller font for the mission title if it's
+                    longer than 25 char. This prevents cutting off of
+                    parts of the header.
+                """
+                if len(xNewsV85.headers[b]) >= 25:
+                    self.header.setFont(smallerHeader)
+
+                # Generating the Description label.
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
+                
+            else:
+
+                artmap = QPixmap()
+                artmap.loadFromData(data)
+                self.image.setPixmap(artmap)
+                self.image.setAlignment(QtCore.Qt.AlignCenter)
+                self.image.adjustSize()
+                frameLayout.addWidget(self.image, 1, 1)
+                # Adding a space to further seperate the article image and body
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 0, 2)
+                frameLayout.addItem(horizSpacer, 3, 2)
+
+                #vert_Spacer(frameLayout, 100, 100)
+                # setting the label for the body of the article
+                frameBuilder(frameLayout, 1, 3, 600, True)
+
+                # Building the header
+                headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
+
+                """
+                    Use a smaller font for the mission title if it's
+                    longer than 25 char. This prevents cutting off of
+                    parts of the header.
+                """
+                if len(xNewsV85.headers[b]) >= 25:
+                    self.header.setFont(smallerHeader)
+
+                # Generating the Description label.
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
 
 
 
