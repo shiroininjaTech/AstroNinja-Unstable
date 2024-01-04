@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 5/5/23
+   * Date Modified: 01/4/24
 """
 
 import AstroNinjaMain
@@ -42,8 +42,7 @@ def tally_ho(x, y):
 
     # tally_ho uses functions from astroNinja to tally the launch counts.
     astroNinjaV85.getSchedule()
-    astroNinjaV85.scheduleList.append('Ah')
-    astroNinjaV85.launchHead2.append('Ah')
+    print(astroNinjaV85.scheduleList) 
     #print(astroNinja.launchHead2)
     # The variables that keep count of the agency Tallies
     global spaceXCount
@@ -217,7 +216,7 @@ def tally_ho(x, y):
 
 
     # Iterate over scheduleList until finished
-    while x != 60 and y != 67:
+    while x != len(astroNinjaV85.scheduleList)-4:
 
 
         # checking for any of the vague launch dates that cause breakage.
