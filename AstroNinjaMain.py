@@ -1118,10 +1118,10 @@ class App(QMainWindow):
         # Building the scroll bar. scrollBuilder() added V.75
         scrollBuilder(self.hubbleTab.layout, 0, 0)
 
-        xNewsV85.hubbleViewz(HubblesortingSelected)
-        xNewsV85.images.append('Ah')
-        xNewsV85.descriptions.append('Ah')
-        xNewsV85.headers.append('ah')
+        xNewsV85.hubbleViewz(xNewsV85.hubbleData,HubblesortingSelected)
+        #xNewsV85.images.append('Ah')
+        #xNewsV85.descriptions.append('Ah')
+        #xNewsV85.headers.append('ah')
 
         def hubbleViewBuilder(b, c, d):
 
@@ -1133,12 +1133,10 @@ class App(QMainWindow):
             # setting the label for the title of the article
 
             self.image= QLabel(self)
-            print(xNewsV85.images[d])
 
-            req = Request(xNewsV85.images[d], headers={'User-Agent': 'Mozilla/5.0'})
+            req = Request(xNewsV85.images[d], headers={'User-Agent': 'Mozilla/5.0'}) # Setting up a user agent so we don't get blocked.
 
-            
-
+        
             # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
             try:
                 data = urlopen(req).read()

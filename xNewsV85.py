@@ -7,7 +7,7 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 11/02/22
+   * Modified: 01/02/24
 """
 import re
 from dateutil import parser
@@ -20,6 +20,7 @@ from dateutil import parser
 global spiderLoot, hubbleData, spaceCom
 spiderLoot = []    # list to be filled with scrapy objects
 hubbleData = []    # List for hubble views.
+webData    = []    # List for JWST views.
 spaceCom = []      # List for space.com articles.
 
 # This is the pipline for news_spider.
@@ -45,8 +46,12 @@ class HubbleCollectorPipeline(object):
         self.ids_seen = set()
 
     def process_item(self, item, spider):
-        hubbleData.append(item)
+        
+        if item['telescope'] == 'Hubble':
+            hubbleData.append(item)
 
+        elif item['telescope'] == 'Webb':
+            webData.append(item)
 
 
 # A function that runs the news_spider and processes the scraped data
@@ -81,6 +86,7 @@ def intestellar_News(sorter, dumpList):
         listedImg.append(linkDict['image'])
 
 
+    
     return
 
 
@@ -90,14 +96,15 @@ def intestellar_News(sorter, dumpList):
     * that retreives the image and description.
 """
 
-def hubbleViewz(sorter):
+def hubbleViewz(source, sorter):
 
+    
     # Sorting the Pictures of the week from hubble by newest.
 
     if sorter == 'Newest':
-        sortedResults = sorted(hubbleData, key = lambda i: parser.parse(i['hubbleDate']), reverse=True)
+        sortedResults = sorted(source, key = lambda i: parser.parse(i['hubbleDate']), reverse=True)
     if sorter == 'Oldest':
-        sortedResults = sorted(hubbleData, key = lambda i: parser.parse(i['hubbleDate']), reverse=False)
+        sortedResults = sorted(source, key = lambda i: parser.parse(i['hubbleDate']), reverse=False)
 
     # Creating some empty lists to dump the contents of each dictionary into.
     global images, descriptions, headers
@@ -110,12 +117,18 @@ def hubbleViewz(sorter):
         hubbleDict = dict(i)
         for i in hubbleDict['hubbleImage']:
             images.append(i)
-        for i in hubbleDict['hubbleDescrip']:
-            head, sep, tail = i.partition("Links Video")                    # doing a final scrub of the image description
-            descriptions.append(head)                                       # removing the link text from the end of the description.
+        
+        # checking to see weather they are hubble or JWST images. For some reason, the description ends up weird if they're processed the same.
+        if source == hubbleData:
+            head, sep, tail = " ".join(hubbleDict['hubbleDescrip']).partition("] Links")                    # doing a final scrub of the image description
+            descriptions.append(head)
+
+        else:    
+            descriptions.append(hubbleDict['hubbleDescrip'])                                       # removing the link text from the end of the description.
+        
         for i in hubbleDict['header']:
             headers.append(i)
-
+        #print(descriptions)
 
 #phoneHome()
 #hubbleViewz()
