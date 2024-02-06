@@ -951,112 +951,105 @@ class App(QMainWindow):
         # tab sets which tab the articles should appear in.
         def newsListBuilder(a, b, c, d, e):
 
-            # Removing unwanted articles from space.com
-            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday', 'deals and gifts', 'Best Drone Deals:', 'Best Cameras', 'What is the moon phase today?']                        # The list of articles to look for
-            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a] or naughtyArticles[5] in xNewsV85.listedTitle[a] or naughtyArticles[6] in xNewsV85.listedTitle[a] or naughtyArticles[7] in xNewsV85.listedTitle[a] or naughtyArticles[8] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
-                # Ends and moves on to the next article if found.
-                return
+
+            # Building the frame for the item created by launch_scheduleBuild()
+            frameBuilder(scroll.layout, c, 1, 1000, False)
+
+
+            # Building the label
+            dateVar = "Date Written: {}\n".format(e)
+            titleVar = "{}".format(a)
+            bodyVar = "{}\n\n".format(b)
+            # setting the label for the title of the article
+            headerBuild(titleVar, 0, 2, frameLayout, 150)
+
+            self.image= QLabel(self)
+
+            """
+                Creating a class that masks the scraper as Mozilla browser.
+                Gets around Admins blocking urllib scrapers on their websites.
+            """
+            class AppURLopener(urllib.request.FancyURLopener):
+                version = "Mozilla/5.0"
+
+            opener = AppURLopener()
+
+
+
+
+            # Fixed in 0.90 Alpha, removed extra image url if there is one.
+            picUrl = d
+
+            picUrl = list(urllib.parse.urlsplit(picUrl))
+            picUrl[2] = urllib.parse.quote(picUrl[2])
+            picUrl = urllib.parse.urlunsplit(picUrl)
+
+            # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
+            try:
+                response = urllib.request.urlopen(picUrl)
+
+            except urllib.error.HTTPError as e:
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 1, 2)
+                frameLayout.addItem(horizSpacer, 2, 2)
+
+                # Setting the label for the date of the article.
+                label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
+
+                # setting the label for the body of the article
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+            except AttributeError as e:
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 1, 2)
+                frameLayout.addItem(horizSpacer, 2, 2)
+
+                # Setting the label for the date of the article.
+                label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
+
+                # setting the label for the body of the article
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+
+
+            except ValueError as e:
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 1, 2)
+                frameLayout.addItem(horizSpacer, 2, 2)
+
+                # Setting the label for the date of the article.
+                label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
+
+                # setting the label for the body of the article
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+
 
             else:
+                data = response.read()
 
-                # Building the frame for the item created by launch_scheduleBuild()
-                frameBuilder(scroll.layout, c, 1, 1000, False)
+                artmap = QPixmap()
+                artmap.loadFromData(data)
+                artmap = QPixmap(artmap).scaled(700, 900, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                self.image.setPixmap(artmap)
+                self.image.setAlignment(QtCore.Qt.AlignCenter)
+                self.image.adjustSize()
+                frameLayout.addWidget(self.image, 2, 2)
+                # Adding a space to further seperate the article image and body
+                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(horizSpacer, 1, 2)
+                frameLayout.addItem(horizSpacer, 3, 2)
 
-
-                # Building the label
-                dateVar = "Date Written: {}\n".format(xNewsV85.listedDate[e])
-                titleVar = "{}".format(xNewsV85.listedTitle[a])
-                bodyVar = "{}\n\n".format(xNewsV85.listedBody[b])
-                # setting the label for the title of the article
-                headerBuild(titleVar, 0, 2, frameLayout, 150)
-
-                self.image= QLabel(self)
-
-                """
-                    Creating a class that masks the scraper as Mozilla browser.
-                    Gets around Admins blocking urllib scrapers on their websites.
-                """
-                class AppURLopener(urllib.request.FancyURLopener):
-                    version = "Mozilla/5.0"
-
-                opener = AppURLopener()
+                # Setting the label for the date of the article.
+                label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
 
 
+                # setting the label for the body of the article
+                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 5, 2)
 
 
-                # Fixed in 0.90 Alpha, removed extra image url if there is one.
-                picUrl = xNewsV85.listedImg[d]
-
-                picUrl = list(urllib.parse.urlsplit(picUrl))
-                picUrl[2] = urllib.parse.quote(picUrl[2])
-                picUrl = urllib.parse.urlunsplit(picUrl)
-
-                # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
-                try:
-                    response = urllib.request.urlopen(picUrl)
-
-                except urllib.error.HTTPError as e:
-                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                    frameLayout.addItem(horizSpacer, 1, 2)
-                    frameLayout.addItem(horizSpacer, 2, 2)
-
-                    # Setting the label for the date of the article.
-                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
-
-                    # setting the label for the body of the article
-                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
-
-                except AttributeError as e:
-                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                    frameLayout.addItem(horizSpacer, 1, 2)
-                    frameLayout.addItem(horizSpacer, 2, 2)
-
-                    # Setting the label for the date of the article.
-                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
-
-                    # setting the label for the body of the article
-                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
-
- 
-
-                except ValueError as e:
-                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                    frameLayout.addItem(horizSpacer, 1, 2)
-                    frameLayout.addItem(horizSpacer, 2, 2)
-
-                    # Setting the label for the date of the article.
-                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 3, 2)
-
-                    # setting the label for the body of the article
-                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
-
-
-
-                else:
-                    data = response.read()
-
-                    artmap = QPixmap()
-                    artmap.loadFromData(data)
-                    artmap = QPixmap(artmap).scaled(700, 900, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-                    self.image.setPixmap(artmap)
-                    self.image.setAlignment(QtCore.Qt.AlignCenter)
-                    self.image.adjustSize()
-                    frameLayout.addWidget(self.image, 2, 2)
-                    # Adding a space to further seperate the article image and body
-                    horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                    frameLayout.addItem(horizSpacer, 1, 2)
-                    frameLayout.addItem(horizSpacer, 3, 2)
-
-                    # Setting the label for the date of the article.
-                    label_maker(dateVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
-
-
-                    # setting the label for the body of the article
-                    label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 5, 2)
-
-
-                    # Adding verticle spacing
-                    vert_Spacer(scroll.layout, 250, 250)
+                # Adding verticle spacing
+                vert_Spacer(scroll.layout, 250, 250)
             
 
         # Building an iterator for working through items passed by the backend module
@@ -1068,13 +1061,14 @@ class App(QMainWindow):
             global positionKeeper
 
             # Removing unwanted articles from space.com
-            naughtyArticles = ['Pictures from space!', 'The top space stories of the week!', 'Join Space.com', ': Full review']                        # The list of articles to look for
-            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a] or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
-                #newsListBuilder(a, a, positionvar, a)
+            # Removing unwanted articles from space.com
+            naughtyArticles = ['Pictures from Space!', 'The top space stories of the week!', 'Black Friday', 'Best telescopes', 'Cyber Monday', 'deals and gifts', 'Best Drone Deals:', 'Best Cameras', 'What is the moon phase today?']                        # The list of articles to look for
+            if naughtyArticles[0] in xNewsV85.listedTitle[a] or naughtyArticles[1] in xNewsV85.listedTitle[a]  or naughtyArticles[2] in xNewsV85.listedTitle[a] or naughtyArticles[3] in xNewsV85.listedTitle[a] or naughtyArticles[4] in xNewsV85.listedTitle[a] or naughtyArticles[5] in xNewsV85.listedTitle[a] or naughtyArticles[6] in xNewsV85.listedTitle[a] or naughtyArticles[7] in xNewsV85.listedTitle[a] or naughtyArticles[8] in xNewsV85.listedTitle[a]:      # if the title matches one of naughtyArticles
+                # Ends and moves on to the next article if found.
                 countKeeper += 1
 
             else:
-                newsListBuilder(a, a, positionvar, a, a)
+                newsListBuilder(xNewsV85.listedTitle[a], xNewsV85.listedBody[a], positionvar, xNewsV85.listedImg[a], xNewsV85.listedDate[a])
                 countKeeper += 1
                 positionKeeper += 1
 
@@ -1123,7 +1117,7 @@ class App(QMainWindow):
         #xNewsV85.descriptions.append('Ah')
         #xNewsV85.headers.append('ah')
 
-        def hubbleViewBuilder(b, c, d):
+        """def hubbleViewBuilder(b, c, d):
 
             # Building the frame for the item created by launch_scheduleBuild()
             frameBuilder(scroll.layout, c, 1, 1000, False)
@@ -1148,16 +1142,12 @@ class App(QMainWindow):
 
                 #vert_Spacer(frameLayout, 100, 100)
                 # setting the label for the body of the article
-                frameBuilder(frameLayout, 1, 3, 600, True)
+                frameBuilder(frameLayout, 1, 3, 800, True)
 
                 # Building the header
                 headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
 
-                """
-                    Use a smaller font for the mission title if it's
-                    longer than 25 char. This prevents cutting off of
-                    parts of the header.
-                """
+
                 if len(xNewsV85.headers[b]) >= 25:
                     self.header.setFont(smallerHeader)
 
@@ -1184,17 +1174,13 @@ class App(QMainWindow):
                 # Building the header
                 headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
 
-                """
-                    Use a smaller font for the mission title if it's
-                    longer than 25 char. This prevents cutting off of
-                    parts of the header.
-                """
+
                 if len(xNewsV85.headers[b]) >= 25:
                     self.header.setFont(smallerHeader)
 
                 # Generating the Description label.
                 label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
-
+            """       
 
 
 
@@ -1206,7 +1192,7 @@ class App(QMainWindow):
         global hubKeeper
         hubKeeper = 0
         def hubIterator(x):
-            hubbleViewBuilder(x, x, x)
+            newsListBuilder(xNewsV85.headers[x], xNewsV85.descriptions[x], x, xNewsV85.images[x], xNewsV85.hubDates[x])
             global hubKeeper
             hubKeeper += 1
             return

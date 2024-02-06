@@ -107,10 +107,11 @@ def hubbleViewz(source, sorter):
         sortedResults = sorted(source, key = lambda i: parser.parse(i['hubbleDate']), reverse=False)
 
     # Creating some empty lists to dump the contents of each dictionary into.
-    global images, descriptions, headers
+    global images, descriptions, headers, hubDates
     images = []
     descriptions = []
     headers = []
+    hubDates = []
 
     # Iterating through each dict item in the sorted list of dicts
     for i in sortedResults:
@@ -128,6 +129,9 @@ def hubbleViewz(source, sorter):
         
         for i in hubbleDict['header']:
             headers.append(i)
+        
+        for i in hubbleDict['hubbleDate']:
+            hubDates.append(i)
         #print(descriptions)
 
 #phoneHome()
