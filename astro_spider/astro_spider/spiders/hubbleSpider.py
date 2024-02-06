@@ -4,19 +4,32 @@ import re
 
 class HubblespiderSpider(scrapy.Spider):
     name = 'hubbleSpider'
-    allowed_domains = ['spacetelescope.org']
-    start_urls = ['https://www.spacetelescope.org/images/potw/']
+    allowed_domains = ['spacetelescope.org', 'esawebb.org']
+    start_urls = ['https://www.spacetelescope.org/images/potw/', 'https://esawebb.org/images/potm/']
 
 
-    custom_settings = {'LOG_ENABLED': True,
+    custom_settings = {'LOG_ENABLED': True, 'CONCURRENT_REQUESTS': '1'
     }
 
 
     def parse(self, response):
-        halfUrl = 'https://www.spacetelescope.org'
+        start_urls = ['https://www.spacetelescope.org/images/potw/']
+        halfhubUrl = 'https://www.spacetelescope.org'
+        halfwebbUrl = 'https://esawebb.org'
         for pic_url in response.xpath("//div[contains(@class, 'col-md-3 col-sm-6 col-xs-12')]/a//@href").extract():
-            full_url = halfUrl+pic_url
-            yield response.follow(full_url, callback=self.parse_Potw)
+ 
+            full_url = halfhubUrl+pic_url
+
+            yield response.follow(full_url, callback=self.parse_Potw, meta={'category': 'Hubble'})
+
+        for pic_url in response.xpath("//div[contains(@class, 'col-lg-4 col-md-6 col-sm-12')]/a//@href").extract():
+
+            full_url = halfwebbUrl+pic_url
+            #print(full_url)
+            
+            if "comparisons" not in full_url:
+
+                yield response.follow(full_url, callback=self.parse_webb, meta={'category': 'Webb'})
 
     def parse_Potw(self, response):
 
@@ -24,6 +37,9 @@ class HubblespiderSpider(scrapy.Spider):
         # merges all of the children into one beast and adds them to a library.
         descDat = []                # the lists that will ultimately be passed to potwData.
         headerData = []
+
+        # Getting the category, this determines the telescope.
+        telescope = response.meta['category']
 
         for r in response.xpath("//div[contains(@class, 'col-md-9 left-column')]"):
             fullDesc = [p.strip() for p in r.xpath('.//text()').extract() if p.strip()]
@@ -50,11 +66,37 @@ class HubblespiderSpider(scrapy.Spider):
             fixedDate = head
 
 
+
         potwData = {
+            'telescope'   : telescope,
             'hubbleImage' : response.xpath("//img[contains(@class, 'img-responsive')]/@src").extract(),
             'header'      : headerData,
             'hubbleDescrip' : descDat,
             'hubbleDate' : fixedDate,
         }
+
+        yield potwData
+
+    def parse_webb(self, response):
+
+        # Getting the category, this determines the telescope.
+        telescope = response.meta['category']
+
+        dateRow = response.xpath("//div[contains(@class, 'right-column')]//div[contains(@id, 'object_info_div')][1]//tr[3]/td/text()").extract_first()
+
+        #print(dateRow)
+
+        if dateRow == None:
+            dateRow = response.xpath("//div[contains(@class, 'right-column')]//div[contains(@id, 'object_info_div')][1]//tr[2]/td/text()").extract_first()
+
+        potwData = {
+            'telescope'   : telescope,
+            'hubbleImage' : response.xpath("//img[contains(@class, 'w-100')]/@src").extract(),
+            'header'      : response.xpath("//div//h1//text()").extract(),
+            'hubbleDescrip' : "".join(response.xpath("//p//text()").extract()),
+            'hubbleDate' :  dateRow,
+        }
+
+        #print(potwData['hubbleDescrip'])
 
         yield potwData
