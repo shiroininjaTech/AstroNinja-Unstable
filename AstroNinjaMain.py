@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 01/01/24
+   * Date Modified: 02/06/24
 """
 """
    * Changelog:
@@ -376,24 +376,24 @@ class App(QMainWindow):
         self.scheduleTab = QWidget()
         #self.graphTab = QWidget()
         self.spacexTab = QWidget()
-        self.hubbleTab = QWidget()
+        self.stellarTab = QWidget()
         self.issTab = QWidget()
 
 
         if themeSelected == 'marine':
-            astroThemesV85.defaultTabs(self.welcomeTab, self.scheduleTab, self.hubbleTab, self.tabs, self.spacexTab, self.issTab)
+            astroThemesV85.defaultTabs(self.welcomeTab, self.scheduleTab, self.stellarTab, self.tabs, self.spacexTab, self.issTab)
         if themeSelected == 'spaceX':
-            astroThemesV85.spacexTabs(self.welcomeTab, self.scheduleTab, self.hubbleTab, self.tabs, self.spacexTab, self.issTab)
+            astroThemesV85.spacexTabs(self.welcomeTab, self.scheduleTab, self.stellarTab, self.tabs, self.spacexTab, self.issTab)
             self.setStyleSheet("QMainWindow { background-color: White; color: White; }")
         if themeSelected == 'broco':
-            astroThemesV85.brocoTabs(self.welcomeTab, self.scheduleTab, self.hubbleTab, self.tabs, self.spacexTab, self.issTab)
+            astroThemesV85.brocoTabs(self.welcomeTab, self.scheduleTab, self.stellarTab, self.tabs, self.spacexTab, self.issTab)
             self.setStyleSheet("QMainWindow { background-color: Black; color: Black; }")
 
 
         self.tabs.addTab(self.welcomeTab, "Welcome")
         self.tabs.addTab(self.scheduleTab, "Launch Schedule")
         self.tabs.addTab(self.spacexTab, "News")
-        self.tabs.addTab(self.hubbleTab, "Hubble Views")
+        self.tabs.addTab(self.stellarTab, "Stellar Views")
         self.tabs.addTab(self.issTab, "ISS Portal")
 
         #=========================================================================================================
@@ -1107,87 +1107,33 @@ class App(QMainWindow):
         # Space Telescope
         #======================================================================================
 
-        self.hubbleTab.layout = QGridLayout()
+        self.stellarTab.layout = QGridLayout()
 
-        # Building the scroll bar. scrollBuilder() added V.75
-        scrollBuilder(self.hubbleTab.layout, 0, 0)
+        # Creating the new sub tabs for Hubble and JWST images.
 
-        xNewsV85.hubbleViewz(xNewsV85.hubbleData,HubblesortingSelected)
-        #xNewsV85.images.append('Ah')
-        #xNewsV85.descriptions.append('Ah')
-        #xNewsV85.headers.append('ah')
+        self.imageTabs = QTabWidget()
+        self.hubblesubTab = QWidget()
+        self.jwstTab = QWidget()
+        self.imageTabs.addTab(self.hubblesubTab, "Hubble")
+        self.imageTabs.addTab(self.jwstTab, "JWST")
+        self.hubblesubTab.layout = QGridLayout()
+        self.jwstTab.layout = QGridLayout()
 
-        """def hubbleViewBuilder(b, c, d):
+        self.stellarTab.layout.addWidget(self.imageTabs, 0, 0)
 
-            # Building the frame for the item created by launch_scheduleBuild()
-            frameBuilder(scroll.layout, c, 1, 1000, False)
-
-            # Building the label
-            bodyVar = "\n\n\t{}".format(xNewsV85.descriptions[b])
-            # setting the label for the title of the article
-
-            self.image= QLabel(self)
-
-            req = Request(xNewsV85.images[d], headers={'User-Agent': 'Mozilla/5.0'}) # Setting up a user agent so we don't get blocked.
-
-        
-            # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
-            try:
-                data = urlopen(req).read()
-
-            except urllib.error.HTTPError as e:
-                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                frameLayout.addItem(horizSpacer, 0, 2)
-                frameLayout.addItem(horizSpacer, 3, 2)
-
-                #vert_Spacer(frameLayout, 100, 100)
-                # setting the label for the body of the article
-                frameBuilder(frameLayout, 1, 3, 800, True)
-
-                # Building the header
-                headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
-
-
-                if len(xNewsV85.headers[b]) >= 25:
-                    self.header.setFont(smallerHeader)
-
-                # Generating the Description label.
-                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
+        #=========================================================================================
+        # Building the first Stellar images tab, this will be for images from the Hubble space telescope.
+        #================================================================================================
                 
-            else:
+        # Building the scroll bar. scrollBuilder() added V.75
+        scrollBuilder(self.hubblesubTab.layout, 0, 0)
 
-                artmap = QPixmap()
-                artmap.loadFromData(data)
-                self.image.setPixmap(artmap)
-                self.image.setAlignment(QtCore.Qt.AlignCenter)
-                self.image.adjustSize()
-                frameLayout.addWidget(self.image, 1, 1)
-                # Adding a space to further seperate the article image and body
-                horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-                frameLayout.addItem(horizSpacer, 0, 2)
-                frameLayout.addItem(horizSpacer, 3, 2)
-
-                #vert_Spacer(frameLayout, 100, 100)
-                # setting the label for the body of the article
-                frameBuilder(frameLayout, 1, 3, 600, True)
-
-                # Building the header
-                headerBuild(xNewsV85.headers[b], 0, 0, frameLayout, 70)
-
-
-                if len(xNewsV85.headers[b]) >= 25:
-                    self.header.setFont(smallerHeader)
-
-                # Generating the Description label.
-                label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 600, frameLayout, 1, 0)
-            """       
-
-
-
+        # processing the data.
+        xNewsV85.hubbleViewz(xNewsV85.hubbleData,HubblesortingSelected)
 
         vert_Spacer(scroll.layout, 250, 250)
 
-
+        # Iterating over the data scrapped fron scrapy and building image and data objects as we go.
 
         global hubKeeper
         hubKeeper = 0
@@ -1200,10 +1146,37 @@ class App(QMainWindow):
         while hubKeeper < 16:
             hubIterator(hubKeeper)
 
-        self.hubbleTab.setLayout(self.hubbleTab.layout)
 
         #==========================================================================================
-        # Creating the fifth tab. The ISS Portal that contains a livestream from the space station,
+        # Creating the second Stellar Images tab, this will be for images from the JWST.
+        #==========================================================================================
+                
+        # Building the scroll bar. scrollBuilder() added V.75
+        scrollBuilder(self.jwstTab.layout, 0, 0)
+
+        # processing the data.
+        xNewsV85.hubbleViewz(xNewsV85.webData,HubblesortingSelected)
+
+        vert_Spacer(scroll.layout, 250, 250)
+
+        # Iterating over the data scrapped fron scrapy and building image and data objects as we go.
+
+        hubKeeper = 0
+        def hubIterator(x):
+            newsListBuilder(xNewsV85.headers[x], xNewsV85.descriptions[x], x, xNewsV85.images[x], xNewsV85.hubDates[x])
+            global hubKeeper
+            hubKeeper += 1
+            return
+
+        while hubKeeper < 16:
+            hubIterator(hubKeeper)
+
+
+        self.stellarTab.setLayout(self.stellarTab.layout)
+        self.hubblesubTab.setLayout(self.hubblesubTab.layout)
+        self.jwstTab.setLayout(self.jwstTab.layout)
+
+        #==========================================================================================
         # Experiment info, and crew information. added V0.85
         #==========================================================================================
 
