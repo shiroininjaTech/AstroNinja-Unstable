@@ -7,7 +7,7 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 01/02/24
+   * Modified: 02/13/24
 """
 import re
 from dateutil import parser
@@ -130,9 +130,8 @@ def hubbleViewz(source, sorter):
         for i in hubbleDict['header']:
             headers.append(i)
         
-        for i in hubbleDict['hubbleDate']:
-            hubDates.append(i)
-        #print(descriptions)
+        hubDates.append((hubbleDict['hubbleDate']).strip())
+
 
 #phoneHome()
 #hubbleViewz()
