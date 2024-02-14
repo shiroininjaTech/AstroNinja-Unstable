@@ -47,7 +47,21 @@ class HubblespiderSpider(scrapy.Spider):
             headerData.append(descHeader)               # Appending it to a list
 
             fullDesc.pop(0)                             # popping the header off the list of <p> objects scraped
-            joinedDesc = " ".join(fullDesc)             # combining all the found objects.
+
+
+            # Fixing the format of the description. 
+            
+            betterSpaced = []
+
+            for i in fullDesc:
+                # Only newline and indent if over 200 characters
+                if len(i) > 300:
+                    betterSpaced.append("\n\n\t" + i)
+                else:
+                    betterSpaced.append(" " + i)        
+
+            
+            joinedDesc = " ".join(betterSpaced)             # combining all the found objects.
             head, sep, tail, = joinedDesc.partition('Credit:')  # Seperating the string by "Credit:"
             descDat.append(head)                        # Adding only everything from before "Credit:" to the list.
 
@@ -89,12 +103,23 @@ class HubblespiderSpider(scrapy.Spider):
         if dateRow == None:
             dateRow = response.xpath("//div[contains(@class, 'right-column')]//div[contains(@id, 'object_info_div')][1]//tr[2]/td/text()").extract_first()
 
+        # Fixing the format of the description. 
+        description = response.xpath("//p//text()").extract()
+        betterSpaced = []
+
+        for i in description:
+            # Only newline and indent if over 200 characters
+            if len(i) > 300:
+                betterSpaced.append("\n\n\t" + i)
+            else:
+                betterSpaced.append(" " + i)        
+
         potwData = {
             'telescope'   : telescope,
             'hubbleImage' : response.xpath("//img[contains(@class, 'w-100')]/@src").extract(),
             'header'      : response.xpath("//div//h1//text()").extract(),
-            'hubbleDescrip' : "".join(response.xpath("//p//text()").extract()),
-            'hubbleDate' :  dateRow,
+            'hubbleDescrip' : "".join(betterSpaced),
+            'hubbleDate' :  "".join(dateRow),
         }
 
         #print(potwData['hubbleDescrip'])
