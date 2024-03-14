@@ -6,7 +6,7 @@
 """
    * Written By : Tom Mullins
    * Created:  07/24/20
-   * Modified: 10/08/23
+   * Modified: 10/17/23
 """
 
 from youtubesearchpython import VideosSearch
@@ -49,13 +49,21 @@ def liftOff():
 
 
     # getting the launch url using a youtube searching library, and then parsing the results to the first video result's link.
+    
     launchSearch = VideosSearch(missionTitle[0], limit = 1)
-    resultDict = launchSearch.result()['result'][0]  # Getting the first dictionary from the main dictionary.
-    result2  = (resultDict['link']).replace("watch?v=", 'embed/')+ '?si=XPF4U5XII6S2xNTz' # Turning the video link into an embed link.
 
-    onlyLink = result2
+    if len(launchSearch.result()['result']) == 0 :
+        return     
+    
+    else:
+
+        resultDict = launchSearch.result()['result'][0]  # Getting the first dictionary from the main dictionary.
+        print(resultDict)
+        result2  = (resultDict['link']).replace("watch?v=", 'embed/')+ '?si=XPF4U5XII6S2xNTz' # Turning the video link into an embed link.
+
+        onlyLink = result2
 
 
 
-    return
+        return
 
