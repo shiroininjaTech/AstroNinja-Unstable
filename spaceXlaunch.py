@@ -6,7 +6,7 @@
 """
    * Written By : Tom Mullins
    * Created:  07/24/20
-   * Modified: 10/17/23
+   * Modified: 03/24/24
 """
 
 from youtubesearchpython import VideosSearch
@@ -58,7 +58,6 @@ def liftOff():
     else:
 
         resultDict = launchSearch.result()['result'][0]  # Getting the first dictionary from the main dictionary.
-        print(resultDict)
         result2  = (resultDict['link']).replace("watch?v=", 'embed/')+ '?si=XPF4U5XII6S2xNTz' # Turning the video link into an embed link.
 
         onlyLink = result2
