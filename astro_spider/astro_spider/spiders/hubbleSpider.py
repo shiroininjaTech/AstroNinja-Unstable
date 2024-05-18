@@ -68,7 +68,7 @@ class HubblespiderSpider(scrapy.Spider):
 
         # Fixing the found items in the xpath of the photo's metadata.
         # This ensures we only get the date of the image so they can be sorted.
-        date =  response.xpath("//tr[3]/td[2]//text()").extract_first()                 # Just get the first item found, which will be the date.
+        date =  response.xpath("//div[1]//tr[3]/td/text()").extract_first()                 # Just get the first item found, which will be the date.
         head, sep, tail = date.partition(', ')                                          # use partition() to seperate the item on the comma
         fixedDate = head                                                                # Getting the head, which is everything in front of the partition (the actual date)
 
@@ -78,6 +78,7 @@ class HubblespiderSpider(scrapy.Spider):
             date =  response.xpath("//tr[2]/td[2]//text()").extract_first()
             head, sep, tail = date.partition(', ')
             fixedDate = head
+            
 
 
 
