@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 01/4/24
+   * Date Modified: 05/22/24
 """
 
 import AstroNinjaMain
@@ -41,7 +41,8 @@ class ItemCollectorPipeline(object):
 def tally_ho(x, y):
 
     # tally_ho uses functions from astroNinja to tally the launch counts.
-    astroNinjaV85.getSchedule() 
+    astroNinjaV85.getSchedule()
+    #print(astroNinjaV85.scheduleList) 
     #print(astroNinja.launchHead2)
     # The variables that keep count of the agency Tallies
     global spaceXCount
@@ -116,7 +117,7 @@ def tally_ho(x, y):
             # Changing the date objects to strings because computers are stupid.
             changedateStr = str(dateChange)
 
-        elif '1st Quarter' in launchDate:
+        elif '1st Quarter' in launchDate or 'TBA' in launchDate:
             launchDate = 'January'
             dateChange = parser.parse(launchDate)
             changedateStr = str(dateChange)
@@ -133,7 +134,7 @@ def tally_ho(x, y):
 
         elif 'Late' in launchDate:
             notLate = launchDate[6:]
-            dateChange = parsergit clone https://github.com/shiroininjaTech/AstroNinja-Unstable.git.parse(notLate)
+            dateChange = parser.parse(notLate)
             changedateStr = str(dateChange)
 
 
