@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 09/24/2020
-# Modified: 11/07/2023
+# Modified: 05/31/2024
 
 # Getting which distro the user is running
 if [ -f /etc/os-release ]; then
@@ -37,7 +37,16 @@ else
   #installing the new library that is used in the newly implimented launch video fix. 
   # We have to install it via pip because it's a bit old and not in the Ubuntu repos.
   # I aplogize for having to do it this way.
-  pip3 install youtube-search-python --break-system-packages 
+  # Apprently, this isn't necessary in Linux Mint
+  
+  # If the user is running Linux Mint
+  if [ "$OS" = "Linux Mint" ] ; then  
+    pip3 install youtube-search-python  
+  
+  else
+    pip3 install youtube-search-python --break-system-packages 
+  
+  fi
 
   # removes the folder, then copies the files to a . folder.
   rm -rf /home/$USER/.AstroNinja
