@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 05/22/24
+   * Date Modified: 06/30/24
 """
 
 import AstroNinjaMain
@@ -91,9 +91,23 @@ def tally_ho(x, y):
             later = launchDate.replace('Mid/Late ', '') # removing breaking characters
             dateChange = parser.parse(later)
             changedateStr = str(dateChange)
+
+        elif 'NET' and 'Mid'in launchDate:
+            
+            
+            noNet = launchDate.replace('Mid-', '')[5:]
+
+            if 'Late' in noNet:
+                noNet = noNet[6:]
+
+            dateChange = parser.parse(noNet)
+            changedateStr = str(dateChange)
+
+
+
  
         elif 'NET' in launchDate:
-            noNet = launchDate[4:]
+            noNet = launchDate[5:]
 
             if 'Late' in noNet:
                 noNet = noNet[6:]
@@ -105,7 +119,7 @@ def tally_ho(x, y):
         elif '/' and 'NET' in launchDate:
             monthString = launchDate
             noNet = monthString[4:]
-            noSlash = noNet[0:3]               # Removing breaking characters
+            noSlash = noNet[0:4]               # Removing breaking characters
             dateChange = parser.parse(noSlash)
             changedateStr = str(dateChange)
  
