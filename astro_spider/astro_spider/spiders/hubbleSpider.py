@@ -4,8 +4,8 @@ import re
 
 class HubblespiderSpider(scrapy.Spider):
     name = 'hubbleSpider'
-    allowed_domains = ['spacetelescope.org', 'esawebb.org']
-    start_urls = ['https://www.spacetelescope.org/images/potw/', 'https://esawebb.org/images/potm/']
+    allowed_domains = ['esahubble.org', 'esawebb.org']
+    start_urls = ['https://esahubble.org/images/potw/', 'https://esawebb.org/images/potm/']
 
 
     custom_settings = {'LOG_ENABLED': True, 'CONCURRENT_REQUESTS': '1'
@@ -14,7 +14,7 @@ class HubblespiderSpider(scrapy.Spider):
 
     def parse(self, response):
         start_urls = ['https://www.spacetelescope.org/images/potw/']
-        halfhubUrl = 'https://www.spacetelescope.org'
+        halfhubUrl = 'https://esahubble.org'
         halfwebbUrl = 'https://esawebb.org'
         for pic_url in response.xpath("//div[contains(@class, 'col-md-3 col-sm-6 col-xs-12')]/a//@href").extract():
  
@@ -123,6 +123,6 @@ class HubblespiderSpider(scrapy.Spider):
             'hubbleDate' :  "".join(dateRow),
         }
 
-        #print(potwData['hubbleDescrip'])
+        #print(len(potwData['header']))
 
         yield potwData
