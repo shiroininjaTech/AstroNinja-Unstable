@@ -6,11 +6,12 @@ class CrewspiderSpider(scrapy.Spider):
 
     name = 'crew_spider'
     allowed_domains = ['wikipedia.org']
-    start_urls = ['https://en.wikipedia.org/wiki/Expedition_70']
+    start_urls = ['https://en.wikipedia.org/wiki/Expedition_72']
     custom_settings = {'LOG_ENABLED': True,
     }
 
     def parse(self, response):
+        
         for bio_url in response.xpath("//table[contains(@class, 'infobox')]//div[contains(@class, 'plainlist')]//a/@href").extract():
             if "#cite_note-3" not in bio_url:
                 yield response.follow(bio_url, callback=self.parse_bio)
@@ -27,7 +28,7 @@ class CrewspiderSpider(scrapy.Spider):
 
         # Getting rid of those pesky wikipedia citation brackets
         finishedBrackets = []
-        pattern = r'(\[[?:0-9]*\])'     # The pattern to be found, the * is crucial to finding every instance
+        pattern = r'(\[[ ?:0-9 ]*\])'     # The pattern to be found, the * is crucial to finding every instance
 
         for i in fixedBio:
             s = i

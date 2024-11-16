@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import sqlite3, os
+import unicodedata
+from scrapy import Selector
 
 class NewsSpiderSpider(scrapy.Spider):
     name = 'news_spider'
@@ -10,74 +12,29 @@ class NewsSpiderSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        """
-        # If the database file doesn't already exist.
-        if not os.path.isfile(os.path.expanduser("~/.AstroNinja/AstroData.db")):
 
-            # Creating the Database
-            datConn = sqlite3.connect(os.path.expanduser("~/.AstroNinja/AstroData.db"))
-
-            datCurse = datConn.cursor()
-
-            # Creating the articles table in the database
-            sql_create_articles_table =  CREATE TABLE IF NOT EXISTS articles (
-                                        id integer PRIMARY KEY,
-                                        url text,
-                                        Title text,
-                                        Date text,
-                                        image text,
-                                        body text
-                                    );
-
-            datCurse.execute(sql_create_articles_table)
-
-            """
         for article_url in response.xpath("//h2[contains(@class, 'entry-title')]/a/@href").extract():
             yield response.follow(article_url, callback=self.parse_article)
 
-        # If the database file does already exist.
-        """elif os.path.isfile(os.path.expanduser("~/.AstroNinja/AstroData.db")):
-
-            # Creating the Database
-            datConn = sqlite3.connect(os.path.expanduser("~/.AstroNinja/AstroData.db"))
-
-            'datCurse = datConn.cursor()
-
-            # Getting all the urls from the database.
-
-            datCurse.execute("SELECT url FROM articles")
-            urls = datCurse.fetchall()
-            for article_url in response.xpath("//h2[contains(@class, 'launch-title')]/a/@href").extract():
-                if article_url in urls:
-                    return
-
-                elif article_url not in urls:
-                    artIn = (article_url)
-                    sqlInsert =  INSERT INTO articles(url)
-                                    VALUES(?,) 
-
-                    datCurse.execute(sqlInsert, artIN)
-                    datConn.commit()
-                    print(article_url)
-
-                    yield response.follow(article_url, callback=self.parse_article)"""
 
     def parse_article(self, response):
-        # Eliminating too small of paragraphs.
+       
+        # Getting the body.
 
         bodyList = []
+        div = response.xpath("//div[contains(@class, 'main-content')]//p//text()").extract()
 
-        # For each <p> Item found
-        for i in response.xpath("//div[contains(@class, 'entry-content')]//p//text()").getall():
-            # Strip excess spaces
-            i.strip()
+        # Eliminating too small of paragraphs and excess whitespace added to the site in 2024
+        for i in div: 
             # IF the item is too small to stand alone.
-            if len(i) < 200:
+            if len(i) < 150:
                 # Don't add newlines or a tab
-                bodyList.append(i)
+                bodyList.append(" ".join(i.split()))
             #but if it is the right size, add those things.
             else:
-                bodyList.append("\n\n\t" + i)
+                bodyList.append("\n\n\t" + " ".join(i.split()))
+
+
 
 
         imgTag = "".join(response.xpath("//figure[contains(@class, 'post-thumbnail')]/img/@src").extract())
