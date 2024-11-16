@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 02/06/24
+   * Date Modified: 11/15/24
 """
 """
    * Changelog:
@@ -52,7 +52,7 @@
 
 #import re
 import os
-from os.path import expanduser
+from os.path import join
 
 from datetime import date
 #import calendar
@@ -97,6 +97,9 @@ PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, Tru
 PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 # Setting up the GUI window class and methods.
 
+# Getting the relative path of the app, this is added in preparation for packaging.
+baseDir = os.path.dirname(__file__)
+
 class App(QMainWindow):
 
 
@@ -106,7 +109,7 @@ class App(QMainWindow):
 
         #self.setGeometry(0, 0, 0, 0)
         self.setWindowTitle('AstroNinja')
-        self.setWindowIcon(QIcon(os.path.expanduser("~/.AstroNinja/Images/Icons/rocket.png")))
+        self.setWindowIcon(QIcon(os.path.join(baseDir, "Images/Icons/rocket.png")))
 
         #self.showMaximized()
         self.initUI()
@@ -151,21 +154,21 @@ class App(QMainWindow):
         def Marine():
             themeConfig.set('theme', 'key1', 'marine')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
         def Spacex():
             themeConfig.set('theme', 'key1', 'spaceX')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
         def broco():
             themeConfig.set('theme', 'key1', 'broco')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -178,7 +181,7 @@ class App(QMainWindow):
         def newest():
             themeConfig.set('articleSorting', 'key1', 'Newest')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -186,7 +189,7 @@ class App(QMainWindow):
         def oldest():
             themeConfig.set('articleSorting', 'key1', 'Oldest')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -199,7 +202,7 @@ class App(QMainWindow):
         def newestHubble():
             themeConfig.set('hubbleSorting', 'key1', 'Newest')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -207,7 +210,7 @@ class App(QMainWindow):
         def oldestHubble():
             themeConfig.set('hubbleSorting', 'key1', 'Oldest')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
             restart_program()
 
@@ -239,9 +242,9 @@ class App(QMainWindow):
 
         global sortingSelected, HubblesortingSelected, versionSelected, themeConfig
 
-        if not os.path.isfile(os.path.expanduser("~/.AstroNinja/config.ini")):
+        if not os.path.isfile(os.path.join(baseDir, "config.ini")):
             themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+            themeConfig.read(os.path.join(baseDir, "config.ini"))
             themeConfig.add_section('theme')
             themeConfig.set('theme', 'key1', 'spaceX')
             themeSelected = themeConfig.get('theme', 'key1')
@@ -259,11 +262,11 @@ class App(QMainWindow):
             themeConfig.set('Updates', 'key1', 'Stable')
             versionSelected = themeConfig.get('Updates', 'key1')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
-        elif os.path.isfile(os.path.expanduser("~/.AstroNinja/config.ini")):
+        elif os.path.isfile(os.path.join(baseDir, "config.ini")):
             themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+            themeConfig.read(os.path.join(baseDir, "config.ini"))
             themeSelected = themeConfig.get('theme', 'key1')
             # Getting the sorting setting last set by the user.
             #global sortingSelected
@@ -285,12 +288,12 @@ class App(QMainWindow):
             global versionSelected, themeConfig
             themeConfig.set('Updates', 'key1', 'Stable')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
 
             # An attempt to get the app to recognize that the settings has changed.
             themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+            themeConfig.read(os.path.join(baseDir, "config.ini"))
 
             # Getting the Update option selected by the user.
             versionSelected = themeConfig.get('Updates', 'key1')
@@ -300,12 +303,12 @@ class App(QMainWindow):
 
             themeConfig.set('Updates', 'key1', 'Unstable')
 
-            with open(os.path.expanduser("~/.AstroNinja/config.ini"), 'w') as f:
+            with open(os.path.join(baseDir, "config.ini"), 'w') as f:
                 themeConfig.write(f)
 
             # An attempt to get the app to recognize that the settings has changed.
             themeConfig = ConfigParser()
-            themeConfig.read(os.path.expanduser("~/.AstroNinja/config.ini"))
+            themeConfig.read(os.path.join(baseDir, "config.ini"))
 
             # Getting the Update option selected by the user.
             versionSelected = themeConfig.get('Updates', 'key1')
@@ -369,6 +372,8 @@ class App(QMainWindow):
         #=================================================================================================
         # Creating tabs in the UI
         #=================================================================================================
+
+        os.system("pwd")
 
         # Initilizing tabs
         self.tabs = QTabWidget()
@@ -503,33 +508,33 @@ class App(QMainWindow):
             global nextLogo
             nextLogo = ''
             if 'SpaceX' in x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/spacex.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/spacex.png")
             elif 'Chinese' in x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/china.png")
+                nextLogo = os.path.join( baseDir, "Images/Logos/china.png")
             elif 'United Launch Alliance' in x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/ula.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/ula.png")
             elif 'Arianespace' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/ariane.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/ariane.png")
             elif 'India' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/india.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/india.png")
             elif 'Rocket Lab' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/rocketlab.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/rocketlab.png")
             elif 'Japan' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/Japan.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/Japan.png")
             elif 'Russian' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/russia.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/russia.png")
             elif 'Pegasus' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/nasa2.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/nasa2.png")
             elif 'Eurockot' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/eurockot.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/eurockot.png")
             elif 'International Launch Services' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/ILS.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/ILS.png")
             elif 'Northrop Grumman' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/northop.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/northop.png")
             elif 'Virgin Orbit' in  x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/virginorbit.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/virginorbit.png")
             elif 'Astra' in x:
-                nextLogo = os.path.expanduser("~/.AstroNinja/Images/Logos/astra.png")
+                nextLogo = os.path.join(baseDir, "Images/Logos/astra.png")
             else:
                 nextLogo = ''
             return nextLogo
@@ -983,10 +988,13 @@ class App(QMainWindow):
             picUrl = list(urllib.parse.urlsplit(picUrl))
             picUrl[2] = urllib.parse.quote(picUrl[2])
             picUrl = urllib.parse.urlunsplit(picUrl)
+            
+            #print(picUrl)
 
             # A proper way to catch image url errors. checks for Http errors like 404 and Value errors.
             try:
                 response = urllib.request.urlopen(picUrl)
+                
 
             except urllib.error.HTTPError as e:
                 horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
@@ -999,6 +1007,8 @@ class App(QMainWindow):
                 # setting the label for the body of the article
                 label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
 
+                print("FAIL")
+
             except AttributeError as e:
                 horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
                 frameLayout.addItem(horizSpacer, 1, 2)
@@ -1009,6 +1019,8 @@ class App(QMainWindow):
 
                 # setting the label for the body of the article
                 label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
+
+                print("FAIL2")
 
 
 
@@ -1023,6 +1035,7 @@ class App(QMainWindow):
                 # setting the label for the body of the article
                 label_maker(bodyVar, QtCore.Qt.AlignLeft, basicFont, 900, frameLayout, 4, 2)
 
+                print("FAIL3")
 
 
             else:
@@ -1135,10 +1148,13 @@ class App(QMainWindow):
 
         # Iterating over the data scrapped fron scrapy and building image and data objects as we go.
 
+        
         global hubKeeper
         hubKeeper = 0
         def hubIterator(x):
+            #print(xNewsV85.headers[x], xNewsV85.descriptions[x], x, xNewsV85.images[x], xNewsV85.hubDates[x])
             newsListBuilder(xNewsV85.headers[x], xNewsV85.descriptions[x], x, xNewsV85.images[x], xNewsV85.hubDates[x])
+            
             global hubKeeper
             hubKeeper += 1
             return
@@ -1187,7 +1203,7 @@ class App(QMainWindow):
         scrollBuilder(self.issTab.layout, 0, 0)
 
         self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
-        self.issView.setUrl(QUrl("https://www.youtube.com/embed/P9C25Un7xaM?si=UFOAv0"))         # setting the URL to the one scraped by testFlight()
+        self.issView.setUrl(QUrl("https://www.youtube.com/embed/O9mYwRlucZY?si=ok9cE1-e-K3hPf8q"))         # setting the URL to the one scraped by testFlight()
         self.issView.setMinimumWidth(900)
         self.issView.setMaximumHeight(700)
         # Building the SpaceX Lens object
@@ -1253,9 +1269,9 @@ class App(QMainWindow):
         """
         frameBuilder(scroll.layout, 1, 1, 750, False)
 
-        verticalSpacer = QSpacerItem(100, 100, QSizePolicy.Maximum, QSizePolicy.Expanding)
+        verticalSpacer = QSpacerItem(125, 125, QSizePolicy.Maximum, QSizePolicy.Expanding)
         frameLayout.addItem(verticalSpacer, 0, 0)
-        frameLayout.addItem(verticalSpacer, 0, 3)
+        frameLayout.addItem(verticalSpacer, 0, 2)
 
         # Adding an ISS Tracker as a Web object.
         mapUrl = "https://isstracker.spaceflight.esa.int/"
@@ -1266,7 +1282,7 @@ class App(QMainWindow):
 
 
         # Building the "Fun facts" section
-        frameBuilder(frameLayout, 0, 2, 450, True)
+        frameBuilder(frameLayout, 0, 4, 450, True)
         self.frame.setLineWidth(5)
 
         # The strings for the facts labels.
@@ -1314,7 +1330,7 @@ class App(QMainWindow):
 
         # Displaying the expidition patch with each bio
         self.expeditionLogoLarge = QLabel(self)
-        exPixLarge = QPixmap(os.path.expanduser("~/.AstroNinja/Images/Logos/issLogoLarge.png"))
+        exPixLarge = QPixmap(os.path.join(baseDir, "Images/Logos/issLogoLarge.png"))
         self.expeditionLogoLarge.setPixmap(exPixLarge)
         self.expeditionLogoLarge.setAlignment(QtCore.Qt.AlignCenter)
         #self.expeditionLogo.setMaximumWidth(60)
@@ -1331,82 +1347,85 @@ class App(QMainWindow):
         # Takes iteratorX as a counter for facilitating the moving on to a new column as needed in the layout.
         def profileBuilder(crewVar, iteratorY):
 
+            if issPortal.crewName[crewVar] == "":
+                return
 
-            # Building the outer frame
+            else:
+                # Building the outer frame
 
-            frameBuilder(scroll.layout, iteratorY, 1, 200, True)
-            self.frame.setMinimumWidth(800)
-            self.frame.setMinimumHeight(500)
+                frameBuilder(scroll.layout, iteratorY, 1, 200, True)
+                self.frame.setMinimumWidth(800)
+                self.frame.setMinimumHeight(500)
 
-            verticalSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-            frameLayout.addItem(verticalSpacer, 3, 1)
-            # creating the scroll area the bios will be kept in.
-            # To-Do: find a better naming scheme and see if I can't just use the scrollBuilder function.
-            scroll2 = QScrollArea()
+                verticalSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                frameLayout.addItem(verticalSpacer, 3, 1)
+                # creating the scroll area the bios will be kept in.
+                # To-Do: find a better naming scheme and see if I can't just use the scrollBuilder function.
+                scroll2 = QScrollArea()
 
-            frameLayout.addWidget(scroll2, 0, 1)
+                frameLayout.addWidget(scroll2, 0, 1)
 
-            scroll2.setWidgetResizable(True)
-            scroll2.setMinimumWidth(700)
-            scroll2.setMaximumWidth(800)
-            scroll2.setMinimumHeight(500)
-            scrollContent2 = QWidget(scroll2)
-            scroll2.layout2 = QGridLayout(scrollContent2)
-            scrollContent2.setLayout(scroll2.layout2)
+                scroll2.setWidgetResizable(True)
+                scroll2.setMinimumWidth(700)
+                scroll2.setMaximumWidth(800)
+                scroll2.setMinimumHeight(500)
+                scrollContent2 = QWidget(scroll2)
+                scroll2.layout2 = QGridLayout(scrollContent2)
+                scrollContent2.setLayout(scroll2.layout2)
 
-            scroll2.setWidget(scrollContent2)
+                scroll2.setWidget(scrollContent2)
 
-            #building the label for the bio
-            smallItems = "Place of Birth: {}\n\nNationality: {} {}\n {}".format(issPortal.crewLocation[crewVar], issPortal.crewNat[crewVar], issPortal.shortBio[crewVar], issPortal.shortBio2[crewVar])
-            genLabel(smallItems, 1, 0, scroll2.layout2)
-            self.label.setMargin(0)
-            self.label.setMinimumWidth(700)
-
-
-            #Adding spacers to the layout
-            #horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
-            #frameLayout.addItem(horizSpacer, 4, 1)
-            #vert_Spacer(frameLayout, 200, 200)
+                #building the label for the bio
+                smallItems = "Place of Birth: {}\n\nNationality: {} {}\n {}".format(issPortal.crewLocation[crewVar], issPortal.crewNat[crewVar], issPortal.shortBio[crewVar], issPortal.shortBio2[crewVar])
+                genLabel(smallItems, 1, 0, scroll2.layout2)
+                self.label.setMargin(0)
+                self.label.setMinimumWidth(700)
 
 
-            # Building the inner frame
-            frameBuilder(frameLayout, 0, 0, 200, True)
-            self.frame.setMinimumHeight(500)     # setting minimum height
-            self.frame.setMaximumWidth(400)
-            #self.frame.setAlignment(QtCore.Qt.AlignCenter)
-            # building the image object for the portrait
-            self.image = QLabel(self)
+                #Adding spacers to the layout
+                #horizSpacer = QSpacerItem(50, 50, QSizePolicy.Maximum, QSizePolicy.Expanding)
+                #frameLayout.addItem(horizSpacer, 4, 1)
+                #vert_Spacer(frameLayout, 200, 200)
 
-            # Had to redo how image urls are loaded so I could ad a User Agent so that we comply with wikipedia's policies.
-            headers = {}
-            headers['User-Agent'] = "AstroNinjaBio (https://github.com/shiroininjaTech/AstroNinja-Stable; twmulli2513@gmail.com) scrapy"
-            imageReq = urllib.request.Request(issPortal.crewImg[crewVar], headers = headers)
-            imageOpener = urllib.request.urlopen(imageReq)
-            image = imageOpener.read()
-            artmap = QPixmap()
-            artmap.loadFromData(image)
-            self.image.setPixmap(artmap)
-            self.image.setAlignment(QtCore.Qt.AlignCenter)
-            self.image.adjustSize()
-            self.image.setMargin(0)
-            frameLayout.addWidget(self.image, 1, 0)
 
-            # Displaying the expidition patch with each bio
-            self.expeditionLogo = QLabel(self)
-            exPix = QPixmap(os.path.expanduser("~/.AstroNinja/Images/Logos/issLogo.png")).scaled(60, 60, QtCore.Qt.KeepAspectRatio)
-            self.expeditionLogo.setPixmap(exPix)
-            #self.expeditionLogo.setAlignment(QtCore.Qt.AlignRight)
-            self.expeditionLogo.setMaximumWidth(60)
-            self.expeditionLogo.setMargin(0)
+                # Building the inner frame
+                frameBuilder(frameLayout, 0, 0, 200, True)
+                self.frame.setMinimumHeight(500)     # setting minimum height
+                self.frame.setMaximumWidth(400)
+                #self.frame.setAlignment(QtCore.Qt.AlignCenter)
+                # building the image object for the portrait
+                self.image = QLabel(self)
 
-            frameLayout.addWidget(self.expeditionLogo, 0, 1)
-            # the header that contains the astronaut's name
-            headerBuild(issPortal.crewName[crewVar], 0, 0, frameLayout, 70)
-            self.header.setFont(smallerHeader)
-            self.header.setMinimumHeight(50)
-            self.header.setMargin(0)
-            #vert_Spacer(frameLayout, 70, 20)
-            return
+                # Had to redo how image urls are loaded so I could ad a User Agent so that we comply with wikipedia's policies.
+                headers = {}
+                headers['User-Agent'] = "AstroNinjaBio (https://github.com/shiroininjaTech/AstroNinja-Stable; twmulli2513@gmail.com) scrapy"
+                imageReq = urllib.request.Request(issPortal.crewImg[crewVar], headers = headers)
+                imageOpener = urllib.request.urlopen(imageReq)
+                image = imageOpener.read()
+                artmap = QPixmap()
+                artmap.loadFromData(image)
+                self.image.setPixmap(artmap)
+                self.image.setAlignment(QtCore.Qt.AlignCenter)
+                self.image.adjustSize()
+                self.image.setMargin(0)
+                frameLayout.addWidget(self.image, 1, 0)
+
+                # Displaying the expidition patch with each bio
+                self.expeditionLogo = QLabel(self)
+                exPix = QPixmap(os.path.join(baseDir, "Images/Logos/issLogo.png")).scaled(60, 60, QtCore.Qt.KeepAspectRatio)
+                self.expeditionLogo.setPixmap(exPix)
+                #self.expeditionLogo.setAlignment(QtCore.Qt.AlignRight)
+                self.expeditionLogo.setMaximumWidth(60)
+                self.expeditionLogo.setMargin(0)
+
+                frameLayout.addWidget(self.expeditionLogo, 0, 1)
+                # the header that contains the astronaut's name
+                headerBuild(issPortal.crewName[crewVar], 0, 0, frameLayout, 70)
+                self.header.setFont(smallerHeader)
+                self.header.setMinimumHeight(50)
+                self.header.setMargin(0)
+                #vert_Spacer(frameLayout, 70, 20)
+                return
 
         global crewIt, xIt
         # crewIt is for iterating through crew members
@@ -1443,7 +1462,7 @@ class App(QMainWindow):
         #=======================================================================
 
 
-        iconList = [os.path.expanduser("~/.AstroNinja/Images/Icons/exit.png"), os.path.expanduser("~/.AstroNinja/Images/Icons/about.png"), os.path.expanduser("~/.AstroNinja/Images/Icons/information.png"), os.path.expanduser("~/.AstroNinja/Images/Icons/refresh.png"), os.path.expanduser("~/.AstroNinja/Images/Icons/update.png")]
+        iconList = [os.path.join(baseDir, "Images/Icons/exit.png"), os.path.join(baseDir, "Images/Icons/about.png"), os.path.join(baseDir, "Images/Icons/information.png"), os.path.join(baseDir, "Images/Icons/refresh.png"), os.path.join(baseDir, "Images/Icons/update.png")]
 
 
         # The menu item builder

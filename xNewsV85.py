@@ -119,6 +119,7 @@ def hubbleViewz(source, sorter):
         for i in hubbleDict['hubbleImage']:
             images.append(i)
         
+            #rint(i)
         # checking to see weather they are hubble or JWST images. For some reason, the description ends up weird if they're processed the same.
         if source == hubbleData:
             head, sep, tail = " ".join(hubbleDict['hubbleDescrip']).partition("] Links")                    # doing a final scrub of the image description
