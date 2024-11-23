@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/15/24
+   * Date Modified: 11/23/24
 """
 """
    * Changelog:
@@ -1203,7 +1203,7 @@ class App(QMainWindow):
         scrollBuilder(self.issTab.layout, 0, 0)
 
         self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
-        self.issView.setUrl(QUrl("https://www.youtube.com/embed/O9mYwRlucZY?si=ok9cE1-e-K3hPf8q"))         # setting the URL to the one scraped by testFlight()
+        self.issView.setUrl(QUrl("https://www.youtube.com/embed/wG4YaEcNlb0?si=pp3Ll4Sq_ftuvhs0"))         # setting the URL to the one scraped by testFlight()
         self.issView.setMinimumWidth(900)
         self.issView.setMaximumHeight(700)
         # Building the SpaceX Lens object
