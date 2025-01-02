@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created: 01/11/18
-   * Date Modified: 06/30/24
+   * Date Modified: 01/02/25
 """
 
 import AstroNinjaMain
@@ -55,7 +55,7 @@ def tally_ho(x, y):
     global russiaCount
     global northCount
     global euroCount
-    global virginCount
+
 
     spaceXCount = 0
     chinaCount = 0
@@ -67,7 +67,7 @@ def tally_ho(x, y):
     russiaCount = 0
     northCount = 0
     euroCount = 0
-    virginCount = 0
+
 
     global changedSlice, changedSlice2, todaySlice, todaydateStr
     # A function to properly clean the data for tallying.
@@ -91,23 +91,9 @@ def tally_ho(x, y):
             later = launchDate.replace('Mid/Late ', '') # removing breaking characters
             dateChange = parser.parse(later)
             changedateStr = str(dateChange)
-
-        elif 'NET' and 'Mid'in launchDate:
-            
-            
-            noNet = launchDate.replace('Mid-', '')[5:]
-
-            if 'Late' in noNet:
-                noNet = noNet[6:]
-
-            dateChange = parser.parse(noNet)
-            changedateStr = str(dateChange)
-
-
-
  
         elif 'NET' in launchDate:
-            noNet = launchDate[5:]
+            noNet = launchDate[4:]
 
             if 'Late' in noNet:
                 noNet = noNet[6:]
@@ -119,7 +105,7 @@ def tally_ho(x, y):
         elif '/' and 'NET' in launchDate:
             monthString = launchDate
             noNet = monthString[4:]
-            noSlash = noNet[0:4]               # Removing breaking characters
+            noSlash = noNet[0:3]               # Removing breaking characters
             dateChange = parser.parse(noSlash)
             changedateStr = str(dateChange)
  
@@ -195,7 +181,7 @@ def tally_ho(x, y):
         global russiaCount
         global northCount
         global euroCount
-        global virginCount
+
 
         # If launch is in the current month and matches with keywords, then add to the tally variable for that agency.
         # Then increment both month count and mission count by 4.
@@ -218,8 +204,6 @@ def tally_ho(x, y):
                  russiaCount += 1
              elif 'Eurockot' in astroNinjaV85.scheduleList[y]:
                  euroCount += 1
-             elif 'Virgin Orbit' in astroNinjaV85.scheduleList[y]:
-                 virginCount += 1
              elif 'Northrop Grumman' and 'International Launch Services' not in astroNinjaV85.scheduleList[y]:
                  northCount += 1
 
@@ -299,12 +283,15 @@ def historian(year):
     sortedRussia = datlistFix('russiaDate')
     sortedNorthrop = datlistFix('northropDate')
     sortedBlue   = datlistFix('blueDate')
-    sortedVirgin    = datlistFix('virginDate')
     sortedRusMil = datlistFix('rusMil')
     sortedRussia = sortedRussia + sortedRusMil          # Adding Russian Military launches to the Russian list.
     sortedRussia = list(dict.fromkeys(sortedRussia))    # Removing duplicates.
     sortedXpace = datlistFix('expace')
-    sortedChina = sortedChina + sortedXpace
+    sortedgal   = datlistFix('galEnergy')
+    sortedCasc  = datlistFix('casc')
+    sortedLandspace = datlistFix('landSpace')
+    sortedCass  = datlistFix('casSpace')
+    sortedChina = sortedChina + sortedXpace + sortedgal + sortedCasc + sortedLandspace + sortedCass
     sortedChina = list(dict.fromkeys(sortedChina))
     #print(sortedChina)
     # The global variables to be passed to the front end to build graphs
@@ -318,7 +305,7 @@ def historian(year):
     global arianeCount
     global russiaCount
     global northCount
-    global blueOrigin, virginCount
+    global blueOrigin
 
     spaceXCount = 0
     chinaCount = 0
@@ -330,7 +317,6 @@ def historian(year):
     russiaCount = 0
     northCount = 0
     blueOrigin = 0
-    virginCount = 0
     #milCount = 0
     #yearVar = '2019'
 
@@ -357,7 +343,6 @@ def historian(year):
     russiaCount = pastTally(sortedRussia, russiaCount, year)
     northCount  = pastTally(sortedNorthrop, northCount, year)
     blueOrigin  = pastTally(sortedBlue, blueOrigin, year)
-    virginCount    = pastTally(sortedVirgin, virginCount, year)
     #milCount    = pastTally(sortedRusMil, milCount, year)
     #russiaCount = russiaCount + milCount
     """

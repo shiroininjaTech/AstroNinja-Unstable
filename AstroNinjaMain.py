@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.85
    * Date Created:  10/13/17
-   * Date Modified: 11/23/24
+   * Date Modified: 01/02/25
 """
 """
    * Changelog:
@@ -593,7 +593,7 @@ class App(QMainWindow):
                 bar_color = 'DarkTurquoise'
 
             # x-coordinates
-            xItems = 11
+            xItems = 10
             ind = np.arange(xItems)
 
 
@@ -780,10 +780,10 @@ class App(QMainWindow):
         astroGraphV85.tally_ho(monthCount, missionCount)    # the meat and bones of the graph feature
 
         # the tallies
-        remainingTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.japaneseCount, astroGraphV85.ulaCount, astroGraphV85.rocketCount, astroGraphV85.indiaCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.euroCount, astroGraphV85.virginCount]
+        remainingTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.japaneseCount, astroGraphV85.ulaCount, astroGraphV85.rocketCount, astroGraphV85.indiaCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.euroCount]
 
         # The Organizations
-        orgs = ('SpaceX', 'China', 'JAXA', 'ULA', 'Rocket\nLabs', 'India', 'ArianeSpace', 'Russia', 'Northrop', 'Eurockot', 'Virgin\nOrbital')
+        orgs = ('SpaceX', 'China', 'JAXA', 'ULA', 'Rocket\nLabs', 'India', 'ArianeSpace', 'Russia', 'Northrop', 'Eurockot')
 
         graph_maker(remainingTallies, 'Launches Remaining', 'Launches Remaining for This Month by Organization\n', orgs, scroll.layout, itemPosition, 1)
         itemPosition += 1
@@ -806,10 +806,10 @@ class App(QMainWindow):
         astroGraphV85.historian(currentYear)
 
         # The tallies
-        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
+        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin]
 
         # The Organizations
-        orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin', 'Virgin\nOrbit')
+        orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin')
 
         # Making year progression automatic.
         titleStr = 'Total Launches For %s by Organization\n' % currentYear
@@ -825,7 +825,7 @@ class App(QMainWindow):
         astroGraphV85.historian(previousYear)
 
         # The tallies
-        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin, astroGraphV85.virginCount]
+        historyTallies = [astroGraphV85.spaceXCount, astroGraphV85.chinaCount, astroGraphV85.ulaCount, astroGraphV85.indiaCount, astroGraphV85.rocketCount, astroGraphV85.japaneseCount, astroGraphV85.arianeCount, astroGraphV85.russiaCount, astroGraphV85.northCount, astroGraphV85.blueOrigin]
 
         titleStr = 'Total Launches For %s by Organization\n' % previousYear
 
