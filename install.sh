@@ -3,7 +3,7 @@
 # A simple Bash shell script that installs packages depended on by AstroNinja
 # Created by: Tom Mullins
 # Created: 10/01/2018
-# Modified: 05/31/2024
+# Modified: 02/18/2025
 
 
 # Testing for addition of an option to install on Fedora
@@ -83,7 +83,27 @@ fi
   fi
 
 
+  # If the user is running Arch or EndeavourOS
+  if [ "$OS" = "Arch" or "EndeavourOS"] ; then
 
+    #Installing from the repos. 
+    sudo pacman -S python3-matplotlib python-pyqtwebengine scrapy
 
+    pip install youtube-search-python --break-system-packages
+    pip install --force-reinstall 'httpx<0.28' --break-system-packages
+    
+    # removes the folder, then copies the files to a . folder.
+    rm -rf /home/$USER/.AstroNinja
+    mkdir /home/$USER/.AstroNinja
+
+    cp -r ./* /home/$USER/.AstroNinja
+
+    # moving the desktop shortcut to the desktop
+    mv /home/$USER/.AstroNinja/AstroNinja.desktop /home/$USER/Desktop/
+
+    # Making both the desktop file and AstroNinjaMain.py executable
+    chmod +x /home/$USER/Desktop/AstroNinja.desktop
+    chmod +x /home/$USER/.AstroNinja/AstroNinjaMain.py
+  fi
 
 fi
