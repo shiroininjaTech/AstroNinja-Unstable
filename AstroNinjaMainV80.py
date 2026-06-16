@@ -9,7 +9,7 @@
    * Written By: Tom Mullins
    * Version: 0.80
    * Date Created:  10/13/17
-   * Date Modified: 06/12/26
+   * Date Modified: 06/16/26
 """
 """
    * Changelog:
@@ -68,8 +68,10 @@ import astroNinja80
 from PyQt5 import QtWebEngineWidgets
 from PyQt5 import QtWebEngineCore
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings
+import astroGraphV80
 import youtubeTest
 import urllib.request
+import xNews
 from configparser import ConfigParser
 
 PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
@@ -549,21 +551,18 @@ class App(QMainWindow):
 
 
 
+
         #==========================================================================================
         # Creating the first tab. The welcome tab that contains a welcome message, the next launch,
         # and the graph showing launches remaining.
         #==========================================================================================
 
         # Configuring the tab's layout
-        self.welcomeTab.layout =  QGridLayout(self)
+        self.welcomeTab.layout =  QGridLayout()
         #self.welcomeTab.layout.setRowStretch(1, 5)
 
         # Building the scrollbars
-        scrollBuilder(self.welcomeTab.layout, 1, 1)
-
-        # Creating the Welcome header using headerBuild()
-        welcome = "Welcome To astroNinja80!   "
-        headerBuild(welcome, 0, 1, self.welcomeTab.layout, 50)
+        firstScroll = scrollBuilder(self.welcomeTab.layout, 1, 1)
 
         # Adding a verticle spacer
         vert_Spacer(scroll.layout, 250, 250)
@@ -576,16 +575,15 @@ class App(QMainWindow):
         scroll.layout.addItem(horizSpacer, 4, 1)
         scroll.layout.addItem(horizSpacer, 6, 1)
         # Building the frame to put the next launch icon and description
-        frameBuilder(scroll.layout, 1, 1, 750, False)
+        frameBuilder(scroll.layout, 0, 1, 750, False)
         # Running the function that uses the backend module that scrapes the data needed
         # to display the next launch. Also builds the label object
-        headerBuild("Next Launch\n", 0, 1, frameLayout, 50)
+        headerBuild("Next Launch", 0, 1, frameLayout, 60)
         self.header.setAlignment(QtCore.Qt.AlignLeft)
 
         get_recent()
         # Choosing the right agency logo and placing it in the frame
         recent_logo(frameLayout, 1, 0, recentMessage)
-
 
         #================================================================================================
         # Attempting to add a YouTube stream as an object in the first tab
@@ -629,6 +627,28 @@ class App(QMainWindow):
         frameLayout.addWidget(vDivider, 0, 1)
         """
 
+        #============================================================================================================================
+        # Adding the Mars Weather service to AstroNinja.
+        # A simple embed using QtWebEngineWidgets as a container.
+        # Added in Version 0.85
+        #============================================================================================================================
+
+        # Building the Mars Meteorologist  Object
+        frameBuilder(scroll.layout, 2, 1, 750, False)
+        frameLayout.addItem(horizSpacer, 1, 1)
+        vert_Spacer(frameLayout, 20, 20)
+        web_wrapper("https://mars.nasa.gov/layout/embed/image/mslweather/", 720, frameLayout, 2, 1, False)
+        frameLayout.addItem(horizSpacer, 3, 1)
+
+        # building the header frame
+        frameBuilder(frameLayout, 0, 1, 650, False)
+        self.frame.setLineWidth(5)
+
+        marsTitle = "Mars Weather Service"
+        headerBuild(marsTitle, 0, 0, frameLayout, 50)
+        
+        # This was for iterating the postions of the items in the tab, in case one item didn't load. not used yet in this version.
+        #itemPosition += 1
 
         #=============================================================================================================================
         # Creating the graph that shows launches remaining.
@@ -640,105 +660,72 @@ class App(QMainWindow):
         monthCount = 0                                   # For iterating over the launchHead2 Items
         missionCount = 3                                 # For iterating over the descriptionMissfin items
         astroGraphV80.tally_ho(monthCount, missionCount)    # the meat and bones of the graph feature
-        # building the widget for the graph
-        self.figure = plt.figure(figsize=(11,5))
-        ax = self.figure.add_subplot(111)
 
-        self.canvas = FigureCanvas(self.figure)
-        #self.canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        scroll.layout.addWidget(self.canvas, 5, 1)
+        # the tallies
+        remainingTallies = [astroGraphV80.spaceXCount, astroGraphV80.chinaCount, astroGraphV80.japaneseCount, astroGraphV80.ulaCount, astroGraphV80.rocketCount, astroGraphV80.indiaCount, astroGraphV80.arianeCount, astroGraphV80.russiaCount, astroGraphV80.northCount, astroGraphV80.euroCount]
 
-        # Changing the graph colors based on which theme is selected:
-        if themeSelected == 'marine':
-            bg_color = 'White'
-            fg_color = 'black'
-            bar_color = 'Darkslategray'
+        # The Organizations
+        orgs = ('SpaceX', 'China', 'JAXA', 'ULA', 'Rocket\nLabs', 'India', 'ArianeSpace', 'Russia', 'Northrop', 'Eurockot')
 
-        if themeSelected == 'spaceX':
-            bg_color = 'White'
-            fg_color = 'black'
-            bar_color = 'Steelblue'
-
-        if themeSelected == 'broco':
-            bg_color = 'black'
-            fg_color = 'white'
-            bar_color = 'DarkTurquoise'
-
-        # x-coordinates
-        xItems = 11
-        ind = np.arange(xItems)
-
-        # heights of bars, also the amounts to plot.
-        height = [astroGraphV80.spaceXCount, astroGraphV80.chinaCount, astroGraphV80.japaneseCount, astroGraphV80.ulaCount, astroGraphV80.rocketCount, astroGraphV80.indiaCount, astroGraphV80.arianeCount, astroGraphV80.russiaCount, astroGraphV80.northCount, astroGraphV80.euroCount, astroGraphV80.virginCount]
-        p1 = plt.bar(ind, height) #setting the plot
-        for x in p1:
-            x.set_color(bar_color)
-        # The function that builds the graph and plots the data to it.
-        def plot():
-            #plt.cla()
-
-            plt.ylabel('Launches Remaining', color=fg_color)
-            plt.xlabel('Organizations/Nations', color=fg_color)
-            plt.title('Launches Remaining for This Month by Organization\n', fontsize=17, color=fg_color)
-            plt.xticks(ind, ('SpaceX', 'China', 'JAXA', 'ULA', 'Rocket\nLabs', 'India', 'ArianeSpace', 'Russia', 'Northrop', 'Eurockot', 'Virgin\nOrbital'), color=fg_color)
-            if max(height) == 0:
-                    plt.yticks(np.arange(0, 2), color=fg_color)
-            else:
-                plt.yticks(np.arange(max(height) + 2), color=fg_color)
-
-            plt.style.use(u'dark_background')
-            ax.patch.set_facecolor(bg_color)
-            #ax.autoscale(enable=True)
-            ax.tick_params(axis='x', labelsize=8)
-            self.figure.patch.set_facecolor(bg_color)
-
-            self.canvas.draw()
-        plot()
+        graph_maker(remainingTallies, 'Launches Remaining', 'Launches Remaining for This Month by Organization\n', orgs, scroll.layout, 3, 1)
 
         #=============================================================================================================================
         # Creating the second graph that shows total launches so far for the year
         # added in Version 0.80
         #=============================================================================================================================
 
+
+        """  
+            After so many years, I finally created a sane way of changing years to tally
+            without doing it manually. 
+        """
+        my_date = date.today()
+
+        currentYear  = str(my_date.year)
+        previousYear = str(my_date.year-1)    # The current year minus one.
+
         # Running function that scrapes launch history in the backend module
-        astroGraphV80.historian('2026')
+        totals = astroGraphV80.historian(currentYear)
 
-        self.secondFigure = plt.figure(figsize=(14,5))
-        ax2 = self.secondFigure.add_subplot(111)
-        self.historyCanvas = FigureCanvas(self.secondFigure)
-        scroll.layout.addWidget(self.historyCanvas, 7, 1)
+        # The tallies (use values returned by historian)
+        historyTallies = [
+            totals.get('spaceX', 0),
+            totals.get('china', 0),
+            totals.get('ula', 0),
+            totals.get('india', 0),
+            totals.get('rocket', 0),
+            totals.get('japanese', 0),
+            totals.get('ariane', 0),
+            totals.get('russia', 0),
+            totals.get('north', 0),
+            totals.get('blueOrigin', 0),
+        ]
 
-        # x-coordinates
-        xItems2 = 14
+        # The Organizations
+        orgs = ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Blue\nOrigin')
 
-        historyInd = np.arange(xItems2)
-        # height of bars as well as amount to plot
-        historyHeights = [astroGraphV80.spaceXCount, astroGraphV80.chinaCount, astroGraphV80.ulaCount, astroGraphV80.indiaCount, astroGraphV80.rocketCount, astroGraphV80.japaneseCount, astroGraphV80.arianeCount, astroGraphV80.russiaCount, astroGraphV80.northCount, astroGraphV80.euroCount, astroGraphV80.landSpace, astroGraphV80.exPace, astroGraphV80.blueOrigin, astroGraphV80.orbitalATK]
-        p2 = plt.bar(historyInd, historyHeights, width=0.4) #setting the plot
+        # Making year progression automatic.
+        titleStr = 'Total Launches For %s by Organization\n' % currentYear
 
+        graph_maker(historyTallies, 'Launch Totals', titleStr, orgs, scroll.layout, 4, 1)
+        #itemPosition += 1
 
-        for x in p2:
-            x.set_color(bar_color)
+        #=================================================================================================
+        # Creating the third graph, which shows  the total launches for the previous year
+        # Added V0.85
+        #=================================================================================================
 
-        # The function that builds the graph and plots the data to it.
-        def historyPlot():
+        # Running function that scrapes launch history in the backend module
+        astroGraphV80.historian(previousYear)
 
-            plt.ylabel('Launch Totals', color=fg_color)
-            plt.xlabel('Organizations/Nations', color=fg_color)
-            plt.title('Total Launches For 2026 by Organization\n', fontsize=17, color=fg_color)
-            plt.xticks(historyInd, ('SpaceX', 'China', 'ULA', 'India', 'Rocket\nLabs', 'Japan', 'Ariane\nSpace', 'Russia', 'Northrop', 'Eurockot', 'Land\nSpace', 'ExPace', 'Blue\nOrigin', 'Orbital\nATK'), color=fg_color)
-            plt.yticks(np.arange(max(historyHeights) + 2), color=fg_color)
-            #plt.ylim(min(historyHeights), max(historyHeights))
-            #plt.style.use(u'dark_background')
-            ax2.patch.set_facecolor(bg_color)
-            ax2.tick_params(axis='x', labelsize=8)
-            self.secondFigure.patch.set_facecolor(bg_color)
+        # The tallies
+        historyTallies = [astroGraphV80.spaceXCount, astroGraphV80.chinaCount, astroGraphV80.ulaCount, astroGraphV80.indiaCount, astroGraphV80.rocketCount, astroGraphV80.japaneseCount, astroGraphV80.arianeCount, astroGraphV80.russiaCount, astroGraphV80.northCount, astroGraphV80.blueOrigin]
 
-            self.historyCanvas.draw()
-        historyPlot()
+        titleStr = 'Total Launches For %s by Organization\n' % previousYear
+
+        graph_maker(historyTallies, 'Launch Totals', titleStr, orgs, scroll.layout, 5, 1)
 
         self.welcomeTab.setLayout(self.welcomeTab.layout)
-
 
         #=================================================================================================
         # The second tab, which contains the complete launch schedule.
@@ -848,9 +835,7 @@ class App(QMainWindow):
 
         self.spacexTab.layout =  QGridLayout()
 
-        import xNews
-
-        xNews.phoneHome()
+        # xNews scraping moved to before QApplication to avoid Qt thread conflicts
 
         # A simple fix to remove duplicate articles from showing up in News page
         #fixed_titleList = list(dict.fromkeys(xNews.titleList))
@@ -947,7 +932,8 @@ class App(QMainWindow):
         # Building the scroll bar. scrollBuilder() added V.75
         scrollBuilder(self.stellarTab.layout, 0, 0)
 
-        xNews.hubbleViewz()
+        # xNews.hubbleViewz() moved to run before QApplication
+        # placeholders if needed
         xNews.fullImage.append('Ah')
         xNews.fullDescription.append('Ah')
 
@@ -1087,6 +1073,16 @@ class App(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    # Prefetch news and hubble data after QApplication exists so QThread can initialize safely.
+    try:
+        xNews.phoneHome()
+    except Exception as e:
+        print('xNews.phoneHome() failed:', e)
+    try:
+        xNews.hubbleViewz()
+    except Exception as e:
+        print('xNews.hubbleViewz() failed:', e)
+
     ex = App()
     #self.show()
     sys.exit(app.exec_())

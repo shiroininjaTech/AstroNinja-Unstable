@@ -8,7 +8,7 @@
    * Written By: Tom Mullins
    * Version: 0.80
    * Date Created: 01/11/18
-   * Date Modified: 06/12/26
+   * Date Modified: 06/16/26
 """
 
 import AstroNinjaMainV80
@@ -108,8 +108,8 @@ def tally_ho(x, y):
     brokenDates = ['Early', 'Quarter', 'First Half', 'TBD', 'Spring', 'Mid-2019', 'summer', 'Q1', 'Q2', 'Q3', 'Q4']
 
 
-    # Iterate over scheduleList until finished
-    while x != len(astroNinja80.scheduleList)-1 and y != len(astroNinja80.scheduleList)-1:
+    # Iterate over scheduleList until finished. Use sentinel-safe boundaries so x and y stop before the appended stub.
+    while x < len(astroNinja80.scheduleList) - 1 and y < len(astroNinja80.scheduleList) - 1:
 
 
         # checking for any of the vague launch dates that cause breakage.
@@ -270,11 +270,10 @@ def tally_ho(x, y):
                 y += 4
 
 
-        elif '/' and 'NET' in astroNinja80.scheduleList[x]:
+        elif '/' in astroNinja80.scheduleList[x] and 'NET' in astroNinja80.scheduleList[x]:
             monthString = astroNinja80.scheduleList[x]
-            #print(monthString)
             noNet = monthString[4:]
-            #noSlash = noNet[0:3]               # Removing breaking characters
+            noSlash = re.sub(r'/.*', '', noNet)               # Removing breaking characters
             # converting scheduleList[x] so that it can be compared to the current month.
             test = parser.parse(noSlash)
             changedateStr = str(test)
@@ -350,6 +349,7 @@ def historian(year):
 
     dateText = []
     orgText = []
+    locText = []
 
     results = map(getPage, historyURLs)
     for result in results:
@@ -376,6 +376,13 @@ def historian(year):
         launchOrgs = historyHtml.find_all("div", attrs={'class': 'rlt-provider'})
         for i in launchOrgs:
             orgText.append(i.text)
+
+        # Getting the launch location. This is to make China tallies more accurate.
+        launchLocations = historyHtml.find_all("div", attrs={'class': 'rlt-location'})
+        for i in launchLocations:
+            locText.append(i.text)
+
+        print('page locations:', len(launchLocations))
 
     # A loop iterating through all the dateText and orgText objects, checking
     # for Organization names and matching years. Upon finding a match in date
@@ -412,7 +419,7 @@ def historian(year):
     blueOrigin = 0
     orbitalATK = 0
 
-    def pastTally(tallyVar):
+    def pastTally(org, loc):
         global spaceXCount
         global chinaCount
         global ulaCount
@@ -426,45 +433,43 @@ def historian(year):
         global landSpace
         global exPace
         global blueOrigin, orbitalATK
-        global tallyCounty
 
-        if 'China' in orgText[tallyVar]:
+        if 'China' in loc:
             chinaCount += 1
-        elif 'SpaceX' in orgText[tallyVar]:
+        elif 'SpaceX' in org:
             spaceXCount += 1
-        elif 'Roscosmos' in orgText[tallyVar] or 'Russian Military' in orgText[tallyVar]:
+        elif 'Roscosmos' in org or 'Russian Military' in org:
             russiaCount += 1
-
-        elif 'Arianespace' in orgText[tallyVar]:
+        elif 'Arianespace' in org:
             arianeCount += 1
-        elif "ISRO" in orgText[tallyVar]:
+        elif "ISRO" in org:
             indiaCount += 1
-        elif 'Rocket Lab' in orgText[tallyVar]:
+        elif 'Rocket Lab' in org:
             rocketCount += 1
-        elif 'Northrop Grumman' in orgText[tallyVar]:
+        elif 'Northrop Grumman' in org:
             northCount += 1
-        elif 'JAXA' in orgText[tallyVar]:
+        elif 'JAXA' in org:
             japaneseCount += 1
-        elif 'LandSpace' in orgText[tallyVar]:
+        elif 'LandSpace' in org:
             landSpace += 1
-        elif 'United Launch Alliance' in orgText[tallyVar]:
+        elif 'United Launch Alliance' in org:
             ulaCount += 1
-        elif 'ExPace' in orgText[tallyVar]:
+        elif 'ExPace' in org:
             exPace += 1
-        elif 'Blue Origin' in orgText[tallyVar]:
+        elif 'Blue Origin' in org:
             blueOrigin += 1
-        elif 'Orbital ATK' in orgText[tallyVar]:
+        elif 'Orbital ATK' in org:
             orbitalATK += 1
 
     #print(len(dateText))
-    while tallyCounty < min(len(dateText), len(orgText)):
-        #print(tallyCounty)
+    common_count = min(len(dateText), len(orgText), len(locText))
+    print(len(dateText), len(orgText), len(locText))
+    tallyCounty = 0
+    while tallyCounty < common_count:
         if year in dateText[tallyCounty]:
-            #print(dateText[tallyCounty])
-            #print(orgText[tallyCounty])
-            pastTally(tallyCounty)
-
+            pastTally(orgText[tallyCounty], locText[tallyCounty])
         tallyCounty += 1
+    
     """
     print("SpaceX %s" % spaceXCount)
     print("China %s" % chinaCount)
@@ -481,7 +486,24 @@ def historian(year):
     # TO-DO : make the loop end early if
     # it reaches the last launch of that year.
     #print('historian: year={}, counts=SpaceX:{}, China:{}, ULA:{}, India:{}, Rocket:{}, JAXA:{}, Ariane:{}, Russia:{}, Northrop:{}, Euro:{}, LandSpace:{}, ExPace:{}, BlueOrigin:{}, OrbitalATK:{}'.format(year, spaceXCount, chinaCount, ulaCount, indiaCount, rocketCount, japaneseCount, arianeCount, russiaCount, northCount, euroCount, landSpace, exPace, blueOrigin, orbitalATK))
-    return
+    totals = {
+        'spaceX': spaceXCount,
+        'china': chinaCount,
+        'ula': ulaCount,
+        'india': indiaCount,
+        'rocket': rocketCount,
+        'japanese': japaneseCount,
+        'ariane': arianeCount,
+        'russia': russiaCount,
+        'north': northCount,
+        'euro': euroCount,
+        'landSpace': landSpace,
+        'exPace': exPace,
+        'blueOrigin': blueOrigin,
+        'orbitalATK': orbitalATK,
+    }
+
+    return totals
 
 #tally_ho(monthCount, missionCount)
 #build_Graph()

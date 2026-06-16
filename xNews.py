@@ -7,14 +7,14 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 06/12/26
+   * Modified: 06/16/26
 """
 
 import re
 import requests, bs4
-import threading
 from queue import Queue
 from multiprocessing import Process
+from PyQt5.QtCore import QThread
 
 # A funtion that gets articles from SpaceX's website
 def phoneHome():
@@ -106,7 +106,7 @@ def phoneHome():
 
     def marsHeadlines(link, urlList):
 
-        newspaper = requests.get(link)
+        newspaper = requests.get(link, headers={'User-Agent': 'Mozilla/5.0'})
         newspaper.raise_for_status()
         martianSoup = bs4.BeautifulSoup(newspaper.text, "lxml")
         headlines = martianSoup.find_all("h2", class_="entry-title")
@@ -227,31 +227,39 @@ def phoneHome():
     # The function that is to be run by each thread.
     def get_page_info(current_page):
         #print(current_page)
-        article = requests.get(current_page)
+        article = requests.get(current_page, headers={'User-Agent': 'Mozilla/5.0'})
         article.raise_for_status()
         global articleSoups
         articleSoups.append(bs4.BeautifulSoup(article.text, "lxml"))
 
-    # The function that processes Items in the threaded queue
-    def process_queue():
-        while True:
-            current_page = page_queue.get()
-            get_page_info(current_page)
-            page_queue.task_done()
-            #page_queue.join()
+    # The function that processes items in the queue using QThread
+    class PageWorker(QThread):
+        def __init__(self, page_queue):
+            super().__init__()
+            self.page_queue = page_queue
+
+        def run(self):
+            while True:
+                current_page = self.page_queue.get()
+                if current_page is None:
+                    self.page_queue.task_done()
+                    break
+                get_page_info(current_page)
+                self.page_queue.task_done()
 
     page_queue = Queue()
-    # Creating the threads and setting them to run the function
-    for i in range(6):
-        t = threading.Thread(target=process_queue)
-        t.daemon = True
+    workers = [PageWorker(page_queue) for _ in range(6)]
+    for t in workers:
         t.start()
-
 
     for current_page in hyperSpace:
         page_queue.put(current_page)
+    for _ in workers:
+        page_queue.put(None)
 
     page_queue.join()
+    for t in workers:
+        t.wait()
     #===========================================================================
     # Using multiprocessing to speed up processing of the data pulled from the
     # 31 urls pulled by marsHeadlines()
@@ -381,25 +389,33 @@ def hubbleViewz():
         global hubbleSoups
         hubbleSoups.append(bs4.BeautifulSoup(article.text, "lxml"))
 
-    def process_queue():
-        while True:
-            current_page = page_queue.get()
-            get_page_info(current_page)
-            page_queue.task_done()
+    class PageWorker(QThread):
+        def __init__(self, page_queue):
+            super().__init__()
+            self.page_queue = page_queue
+
+        def run(self):
+            while True:
+                current_page = self.page_queue.get()
+                if current_page is None:
+                    self.page_queue.task_done()
+                    break
+                get_page_info(current_page)
+                self.page_queue.task_done()
 
     page_queue = Queue()
-
-    for i in range(2):
-        t = threading.Thread(target=process_queue)
-        t.daemon = True
+    workers = [PageWorker(page_queue) for _ in range(2)]
+    for t in workers:
         t.start()
-
-        #start = time.time()
 
     for current_page in hubbleLinks:
         page_queue.put(current_page)
+    for _ in workers:
+        page_queue.put(None)
 
     page_queue.join()
+    for t in workers:
+        t.wait()
 
     #===========================================================================
     # Process the fetched Hubble pages and extract image URLs.
