@@ -731,6 +731,7 @@ class App(QMainWindow):
         # The second tab, which contains the complete launch schedule.
         #=================================================================================================
 
+
         # Configuring the tab
         self.scheduleTab.layout = QGridLayout()
         # Building the header
@@ -760,20 +761,13 @@ class App(QMainWindow):
             frameBuilder(scroll.layout, e, 1, 300, False)
             # Building the label
             scheduleItem = "{}\n\n{}\n\n{}\n\n{}\n\n".format(astroNinja80.scheduleList[a],astroNinja80.scheduleList[b],astroNinja80.scheduleList[c],astroNinja80.scheduleList[d])
-            self.itemLabel = QLabel(scheduleItem, self)
-            self.itemLabel.adjustSize()
-            self.itemLabel.setFixedWidth(800)
-            self.itemLabel.setWordWrap(True)
-            self.itemLabel.setFont(basicFont)
-            frameLayout.addWidget(self.itemLabel)
+            label_maker(scheduleItem, QtCore.Qt.AlignLeft, basicFont, 800, frameLayout, 0, 0)
+
+            #frameLayout.addWidget(self.itemLabel)
             scroll.layout.addWidget(self.frame, e, 2)
 
-            frameBuilder(scroll.layout, e, 1, 300, False)
             # getting the agency logo for each item
             recent_logo(scroll.layout, e, 1, scheduleItem)
-            #self.frame.setMaximumWidth(1000)
-
-
 
 
 
@@ -1002,6 +996,134 @@ class App(QMainWindow):
 
         # Add tabs to widget
         grid_layout.addWidget(self.tabs)
+
+
+        #==========================================================================================
+        # Creating the ISS Tab.
+        # Experiment info, and crew information. added V0.85
+        #==========================================================================================
+
+        # Configuring the tab's layout
+        self.issTab.layout =  QGridLayout()
+
+        # Building the scrollbars
+        scrollBuilder(self.issTab.layout, 0, 0)
+
+        self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
+        self.issView.setUrl(QUrl("https://www.youtube.com/embed/FuuC4dpSQ1M?si=wsArp49pb3SGahTo"))         # setting the URL to the one scraped by testFlight()
+        self.issView.setMinimumWidth(900)
+        self.issView.setMaximumHeight(700)
+        # Building the SpaceX Lens object
+        frameBuilder(scroll.layout, 0, 1, 750, False)
+        vert_Spacer(scroll.layout, 150, 50)
+        frameLayout.addWidget(self.issView, 2, 0)
+
+
+
+
+        # building the header frame
+        windowMessage = "                           ISS Window                        "
+        headerBuild(windowMessage, 0, 0, frameLayout, 50)
+
+        frameBuilder(frameLayout, 2, 1, 450, True)              # Creating the inner frame
+        self.frame.setLineWidth(5)
+
+        headerMessage = "HDEV Camera"
+        technicalDescrip = "\tActivated on April 30, 2014, the primary purpose of the High Definition Earth-Viewing System (HDEV) is to monitor the rate at which HD video image quality degrades when exposed to the harsh environment of space, mainly cosmic ray damage. Unfortunatly, the HDEV experiment reached End of Life in 2019, but rejoice space fans! Live views of our beautiful home can be enjoyed through another camera mounted elsewhere on the ISS.\n\tThis new camera presents a new view in which one may occasionally spot a solar panel.\n"
+        blackHead = "Why is the window black?\n"
+        descrip = "\tDon't fear! The ISS is currently passing over the night side of the Earth. The view usually brightens again a few minutes, and sometimes we're treated with a sunrise!"
+        powerHead = "What is this screen?\n"
+        screenDesc = "\tIf a screen that looks more like a PowerPoint slide is greeting you, don't fret! The system is only switching cameras or the feed has lost contact with home. The stream is still working, and the view will return."
+        headerBuild(headerMessage, 0, 0, frameLayout, 100)
+
+
+        welcomeFont.setBold(True)
+        # Creating the label for the technical description of HDEV
+        label_maker(technicalDescrip, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 1, 0 )
+
+
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 2, 0)
+
+        # Creating the label with the black header
+        label_maker(blackHead, QtCore.Qt.AlignCenter, welcomeFont, 450, frameLayout, 3, 0)
+
+
+        # Creating the black screen explanation label
+        label_maker(descrip, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 4, 0)
+
+
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 5, 0)
+
+        # Creating the label with the power point head
+        label_maker(powerHead, QtCore.Qt.AlignCenter, welcomeFont, 450, frameLayout, 6, 0)
+
+
+        # Creating the black screen explanation label
+
+        label_maker(screenDesc, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 7, 0)
+        #horizSpacer = QSpacerItem(20, 20, QSizePolicy.Maximum, QSizePolicy.Expanding)
+        #frameLayout.addItem(horizSpacer, 3, 2)
+
+
+        """
+            Creating the ISS tracker section
+        """
+        frameBuilder(scroll.layout, 1, 1, 750, False)
+
+        verticalSpacer = QSpacerItem(125, 125, QSizePolicy.Maximum, QSizePolicy.Expanding)
+        frameLayout.addItem(verticalSpacer, 0, 0)
+        frameLayout.addItem(verticalSpacer, 0, 2)
+
+        # Adding an ISS Tracker as a Web object.
+        mapUrl = "https://isstracker.spaceflight.esa.int/"
+        trackerHTML = "<body padding='0px' style='background-color: #778899; max-height: 350; max-width: 625;'> <iframe width='100%' height='100%' allowtransparency='true' style='background: Darkslategray; position: fixed; top:0; left:0; bottom:0; right:0;' src='{}' frameborder='0' scrolling='no' allowfullscreen></iframe>".format(mapUrl)
+        web_wrapper(trackerHTML, 100, frameLayout, 0, 1, True)
+        self.webView.setMaximumWidth(630)
+        self.webView.setMaximumHeight(350)
+
+
+        # Building the "Fun facts" section
+        frameBuilder(frameLayout, 0, 4, 450, True)
+        self.frame.setLineWidth(5)
+
+        # The strings for the facts labels.
+        speed = "The International Space Station orbits the Earth every 90 minutes, travelling at 5 miles per second."
+        orbit = "The station orbits our planet 16 times a day."
+        altitude = "The ISS resides about 250 miles from Earth. On average, it takes about six hours to reach the station from Earth."
+        headerStr = "ISS Fun Facts"
+
+        #Building and placing the labels.
+        headerBuild(headerStr, 0, 0, frameLayout, 100)
+        label_maker(speed, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 1, 0)
+        # Throwing in a divider
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 5, 0)
+
+        frameLayout.addWidget(hDivider, 2, 0)
+        label_maker(orbit, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 3, 0)
+        # Throwing in a divider
+        hDivider  = QFrame()
+        hDivider.setFrameShape(QFrame.HLine)
+        hDivider.setLineWidth(3)
+        frameLayout.addWidget(hDivider, 5, 0)
+
+        frameLayout.addWidget(hDivider, 4, 0)
+        label_maker(altitude, QtCore.Qt.AlignLeft, basicFont, 450, frameLayout, 5, 0)
+
+
+        # Keep at bottom of tab section. needed for the tab to showup.
+        self.issTab.setLayout(self.issTab.layout)
+
+
+
         #=======================================================================
         # Creating the menu bar and its entries.
         #=======================================================================
