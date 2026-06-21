@@ -9,7 +9,7 @@
    * Written By: Tom Mullins
    * Version: 0.80
    * Date Created:  10/13/17
-   * Date Modified: 06/16/26
+   * Date Modified: 06/21/26
 """
 """
    * Changelog:
@@ -44,10 +44,10 @@
 import re
 import requests, bs4
 import time, os
-from os.path import expanduser
+#from os.path import expanduser
 from datetime import date
-import calendar
-from dateutil import parser
+#import calendar
+#from dateutil import parser
 import sys
 import PyQt5
 from PyQt5 import QtCore
@@ -59,20 +59,21 @@ from PyQt5.QtCore import QUrl
 import astroGraphV80
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 import numpy as np
-from configparser import RawConfigParser
 import astroThemesV85
 import urllib.request
 import astroNinja80
 from PyQt5 import QtWebEngineWidgets
-from PyQt5 import QtWebEngineCore
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings
+from PyQt5.QtWebEngineWidgets import QWebEngineProfile
 import astroGraphV80
-import youtubeTest
 import urllib.request
 import xNews
 from configparser import ConfigParser
+import http.server
+import socketserver
+import threading
+from PyQt5.QtCore import QUrl
 
 PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 PyQt5.QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
@@ -1009,8 +1010,78 @@ class App(QMainWindow):
         # Building the scrollbars
         scrollBuilder(self.issTab.layout, 0, 0)
 
-        self.issView = QtWebEngineWidgets.QWebEngineView()     # creating the webengine object
-        self.issView.setUrl(QUrl("https://www.youtube.com/embed/FuuC4dpSQ1M?si=wsArp49pb3SGahTo"))         # setting the URL to the one scraped by testFlight()
+        """
+            Creating the ISS livestream embed, which threw several errors, so I had Claude help me troubleshoot. 
+            The main issue was that YouTube was blocking the stream from loading in the QWebEngineView, which was giving error 153. 
+            To get around this, I had to set a desktop user-agent and allow local HTML to access remote URLs. 
+            I also had to create a local server to serve the YouTube embed code with sandbox disabled, which finally allowed the stream to load properly.
+        
+            I'm not 100% behind this clunky fix, but it is the only thing that got it to work after arguing with the bot for few hours.
+        """
+        # Enable plugins globally
+        QWebEngineSettings.globalSettings().setAttribute(
+            QWebEngineSettings.PluginsEnabled, True
+        )
+        QWebEngineSettings.globalSettings().setAttribute(
+            QWebEngineSettings.JavascriptEnabled, True
+        )
+
+        # Allow local HTML to access remote URLs and set a desktop user-agent to avoid YouTube blocking (fix error 153)
+        # TODO: find out iff all tese settings are necessary, or if some can be removed.
+        QWebEngineSettings.globalSettings().setAttribute(
+            QWebEngineSettings.LocalContentCanAccessRemoteUrls, True
+        )
+        QWebEngineSettings.globalSettings().setAttribute(
+            QWebEngineSettings.LocalContentCanAccessFileUrls, True
+        )
+        QWebEngineSettings.globalSettings().setAttribute(
+            QWebEngineSettings.WebGLEnabled, True
+        )
+        
+        QWebEngineProfile.defaultProfile().setHttpUserAgent(
+             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36"
+         )
+
+        # Load YouTube embed with sandbox disabled
+        class YouTubeHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == '/':
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    html = b"""
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <style>
+                            body { margin: 0; padding: 0; overflow: hidden; }
+                            iframe { border: none; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe width="900" height="700" 
+                            src="https://www.youtube.com/embed/FuuC4dpSQ1M?si=jTdxMlCOACYwXkhw&fs=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" 
+                            allowfullscreen>
+                        </iframe>
+                    </body>
+                    </html>
+                    """
+                    self.wfile.write(html)
+
+        # Start local server in background thread
+        PORT = 8888
+        handler = YouTubeHandler
+        httpd = socketserver.TCPServer(("", PORT), handler)
+        server_thread = threading.Thread(target=httpd.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
+
+        # Replace your YouTube embed code with this:
+        self.issView = QtWebEngineWidgets.QWebEngineView()
+        self.issView.setUrl(QUrl(f"http://localhost:{PORT}/"))
         self.issView.setMinimumWidth(900)
         self.issView.setMaximumHeight(700)
         # Building the SpaceX Lens object

@@ -7,13 +7,12 @@
 """
    * Written By : Tom Mullins
    * Created:  04/30/18
-   * Modified: 06/16/26
+   * Modified: 06/21/26
 """
 
 import re
 import requests, bs4
 from queue import Queue
-from multiprocessing import Process
 from PyQt5.QtCore import QThread
 
 # A funtion that gets articles from SpaceX's website
